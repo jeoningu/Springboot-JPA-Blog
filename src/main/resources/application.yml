@@ -1,3 +1,15 @@
+# application.properties 예전 레거시 방식 web.xml, root-context.xml, servlet-context.xml의 합본
+# .properties 대신 .yml로 하면 파일이 좀 더 가벼워진다.
+
+server:
+  port: 8000
+  servlet:
+    context-path: /blog
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
 spring:
   mvc:
     view:
@@ -9,3 +21,24 @@ spring:
     url: jdbc:mysql://localhost:3306/blog?serverTimezone=Asia/Seoul
     username: jig123
     password: root
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      #create : 서버 시작시마다 DB초기화, update : 수정사항만 DB에 반영, none : 동작 안 함
+      ddl-auto: create
+      naming:
+        # org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl : 변수명 그대로 테이블에 필드로 만듬
+        # org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy : userRole ->  user_role 소문자와 언더바로 구성된 필드로 만듬
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      # true : jpa가 사용하는 기본 넘버링 전략을 사용, false : 기본 넘버링 전략 사용 안 함(각 클래스에서 설정?)
+      use-new-id-generator-mappings: false
+    # true : 콘솔에 sql 보이게 함
+    show-sql: true
+    # 콘솔에 sql 정렬
+    properties:
+      hibernate.format_sql: true
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
