@@ -41,11 +41,14 @@ public class Board {
      *
      * oneToMany는 fetch 기본값이 FetchType.LAZY이기 때문에 sql에 join이 포함되지 않는다. 만약 한번에 같이 조회하고 싶다면 fetch를 FetchType.EAGER로 변경하면 된다.
      *
-     * mappedBy : 참조관계일 때 부모테이블에서 자식테이블을 조회하기 위한 설정 ( DB에 컬럼 안 만듬), '자식 테이블 객체'에서 참조하는 '부모 객체 필드명'을 적으면 된다.
+     * mappedBy : 참조관계일 때 부모테이블에서 자식테이블을 조회하기 위한 설정 ( DB에 컬럼 안 만듬),
+     *            '자식 테이블 객체'에서 참조하는 '부모 객체 필드명'을 적으면 된다.
      * JoinColumn: 참조관계일 때 자식테이블에 FK컬럼을 만들기 위한 설정 ( DB에 컬럼 만듬 )
      */
-    @OneToMany(mappedBy = "Board", fetch = FetchType.LAZY) // One = Board, Many = Reply : 일 대 다 관계이다.// 게시글에서 답글을 같이 조회하고 싶은데, OneToMany는 fetch 기본값이 LAZY라서 EAGER로 바꿔줬따.
-    private List<Reply> replyList;
+    //  One = Board, Many = Reply : 일 대 다 관계이다.// 게시글에서 답글을 같이 조회하고 싶은데,
+    // OneToMany는 fetch 기본값이 LAZY라서 EAGER로 바꿔줬따.
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    private List<Reply> reply;
 
     @CreationTimestamp
     private Timestamp createDate;
