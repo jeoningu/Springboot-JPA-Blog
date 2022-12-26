@@ -3,6 +3,9 @@ let index ={
         $("#btn-save").on("click", () => {      // function(){} 대신 ()=>{} 사용하는 이유 : this를 바인딩하기 위함. function으로 하면 this는 window를 가리킴
             this.save();
         });
+        $("#btn-login").on("click", () => {
+            this.login();
+        });
     },
 
     save: function () {
@@ -38,6 +41,30 @@ let index ={
         }).fail(function(error){
             alert(JSON.stringify(error));
         });
+    },
+
+    login: function () {
+
+        let data = {
+            username : $("#username").val(),
+            password : $("#password").val()
+        };
+
+        $.ajax({
+            type : "POST",
+            url : "/blog/api/user/login",
+            data : JSON.stringify(data),  // http body 데이터
+            contentType : "application/json; charset=utf-8", // body 데이터가 어떤 타입인지(MIME)
+            dataType: "json" // 서버로부터의 ajax 응답 데이터를 javascript object 형태로 변환해서 응답해줌 (생략가능)
+
+        }).done(function(resp){
+            alert("로그인이 완료되었습니다");
+            location.href ="/blog";
+
+        }).fail(function(error){
+            alert(JSON.stringify(error));
+        });
     }
 };
+
 index.init();
