@@ -1,6 +1,12 @@
 # application.properties 예전 레거시 방식 web.xml, root-context.xml, servlet-context.xml의 합본
 # .properties 대신 .yml로 하면 파일이 좀 더 가벼워진다.
 
+logging:
+  level:
+    com :
+      jig:
+        blog: debug
+
 server:
   port: 8000
   servlet:
@@ -26,7 +32,7 @@ spring:
     open-in-view: true
     hibernate:
       #create : 서버 시작시마다 DB초기화, update : 수정사항만 DB에 반영, none : 동작 안 함
-      ddl-auto: create
+      ddl-auto: update
       naming:
         # org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl : 변수명 그대로 테이블에 필드로 만듬
         # org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy : userRole ->  user_role 소문자와 언더바로 구성된 필드로 만듬
@@ -38,6 +44,16 @@ spring:
     # 콘솔에 sql 정렬
     properties:
       hibernate.format_sql: true
+
+  # 스프링에서 js 파일 변경시 자동 반영
+#  devtools:
+#    livereload:
+#      enabled: true
+#  freemarker:
+#    cache: false
+#  thymeleaf:
+#    cache: false
+
 
   jackson:
     serialization:
