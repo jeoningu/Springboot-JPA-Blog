@@ -28,7 +28,7 @@ public class Board {
     @Lob // 대용량 데이터
     private String content; // 섬머노트라는 라이브러리를 사용하면 일반적으로 적은 글이 <html>태그가 섞여서 디자인 됨. 따라서 데이터 용량이 커지기 때문에 대용량 데이터가 필요
 
-    @ColumnDefault("0")  // int니까 ''으로 감싸줄 필요 없음
+    // 직접 넣어주자. @ColumnDefault("0")  // int니까 ''으로 감싸줄 필요 없음
     private int count;
 
     @ManyToOne // Many = Board, One = User,  다 대 일 관계
