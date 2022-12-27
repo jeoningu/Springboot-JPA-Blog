@@ -10,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 /**
  * service가 필요한 이유
@@ -28,6 +30,10 @@ public class BoardService {
         board.setUser(user);
 
         boardRepository.save(board);
+    }
+
+    public List<Board> getList() {
+        return boardRepository.findAll();
     }
 
 }
