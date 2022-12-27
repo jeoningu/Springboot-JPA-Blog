@@ -19,10 +19,10 @@
 	<dependencies>
 		<!-- 추가 라이브러리 시작-->
 		<!-- 시큐리티 태그 라이브러리 -->
-<!--		<dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
-		</dependency>-->
+		</dependency>
 
 		<!-- JSP 템플릿 엔진 (기본적으로 템플릿을 지원하지 않아서 jsp 파일을 모아두는 폴더를 인식하기 위함? -->
 		<dependency>
@@ -40,10 +40,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!--<dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>-->
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -70,11 +72,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<!--		<dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
-		</dependency>-->
+		</dependency>
 	</dependencies>
 
 	<build>
