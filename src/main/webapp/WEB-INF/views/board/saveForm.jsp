@@ -2,7 +2,6 @@
 <%@ include file="../layout/header.jsp"%>
 
 <div class="container">
-    <%-- 스프링 시큐리티에 의한 로그인 요청 --%>
     <form>
         <div class="form-group">
             <label for="title">Title:</label>

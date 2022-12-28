@@ -1,18 +1,13 @@
 package com.jig.blog.service;
 
 import com.jig.blog.model.Board;
-import com.jig.blog.model.RoleType;
 import com.jig.blog.model.User;
 import com.jig.blog.repository.BoardRepository;
-import com.jig.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 
 /**
@@ -34,8 +29,14 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public Page<Board> getList(Pageable pageable) {
+    public Page<Board> getBoardList(Pageable pageable) {
         return boardRepository.findAll(pageable);
+    }
+
+    public Board getBoardDetail(int id) {
+        return boardRepository.findById(id).orElseThrow(() -> {
+            return new IllegalArgumentException("글 상세 보기 실패 - 찾을 수 없는 board id 입니다. : " + id );
+        });
     }
 
 }
