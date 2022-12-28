@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /*
 @Controller는 메서드에서 리턴시에 viewResolver가 view까지 model을 가져간다.
@@ -37,8 +36,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}")
-    public String getBoardDetail(@PathVariable int id, Model model) {
-        model.addAttribute("board", boardService.getBoardDetail(id));
+    public String getBoard(@PathVariable int id, Model model) {
+        model.addAttribute("board", boardService.getBoard(id));
         return "board/detail";
     }
 }
