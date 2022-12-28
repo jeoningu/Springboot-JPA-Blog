@@ -6,6 +6,9 @@ let index ={
 /*        $("#btn-login").on("click", () => {
             this.login();
         });*/
+        $("#btn-update").on("click", () => {
+            this.update();
+        });
     },
 
     save: function () {
@@ -65,6 +68,29 @@ let index ={
             alert(JSON.stringify(error));
         });
     }*/
+
+    update: function () {
+        let data = {
+            id : $("#id").val(),
+            password : $("#password").val(),
+            email : $("#email").val()
+        };
+
+        $.ajax({
+            type : "PUT",
+            url : "/user",
+            data : JSON.stringify(data),  // http body 데이터
+            contentType : "application/json; charset=utf-8", // body 데이터가 어떤 타입인지(MIME)
+            dataType: "json" // 서버로부터의 ajax 응답 데이터를 javascript object 형태로 변환해서 응답해줌 (생략가능)
+
+        }).done(function(resp){
+            alert("회원수정이 완료되었습니다");
+            location.href ="/";
+
+        }).fail(function(error){
+            alert(JSON.stringify(error));
+        });
+    }
 };
 
 index.init();

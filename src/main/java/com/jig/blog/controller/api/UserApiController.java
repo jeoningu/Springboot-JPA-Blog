@@ -1,17 +1,14 @@
 package com.jig.blog.controller.api;
 
 import com.jig.blog.dto.ResponseDto;
-import com.jig.blog.model.RoleType;
 import com.jig.blog.model.User;
-import com.jig.blog.repository.UserRepository;
 import com.jig.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpSession;
 
 @RestController
 public class UserApiController {
@@ -46,4 +43,11 @@ public class UserApiController {
 //
 //        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 //    }
+
+    @PutMapping("/user")
+    public ResponseDto<Integer> userUpdate(@RequestBody User user) {
+
+        userService.updateUser(user);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
 }
