@@ -46,4 +46,15 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
+    @Transactional
+    public void updateBoard(int id, Board board) {
+
+        Board findBoard = boardRepository.findById(id).orElseThrow(() -> {
+            return new IllegalArgumentException("글 수정 실패 - 찾을 수 없는 board id 입니다. : " + id);
+        });
+
+        findBoard.setTitle(board.getTitle());
+        findBoard.setContent(board.getContent());
+    }
+
 }
