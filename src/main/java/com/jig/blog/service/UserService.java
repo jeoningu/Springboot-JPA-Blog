@@ -1,9 +1,12 @@
 package com.jig.blog.service;
 
+import com.jig.blog.config.auth.PrincipalDetail;
 import com.jig.blog.model.RoleType;
 import com.jig.blog.model.User;
 import com.jig.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +41,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(User user) {
+    public void updateUser(User user, PrincipalDetail principalDetail) {
         /*
         수정 시에는 영속성 컨텍스트를 이용한다.
          1. DB에서 SELECT해서 User 오브젝트를 영속성 컨텍스트에 영속화시킨다.
@@ -56,10 +59,12 @@ public class UserService {
         persistenceUser.setPassword(encPassword);
         persistenceUser.setEmail(user.getEmail());
 
-        //TODO: SESSION에 변경된 회원정보 반영 필요함
+        // 변경된 회원정보 SESSION에 반영 ( 참고 :  https://azurealstn.tistory.com/92 )
+        principalDetail.setUser(persistenceUser);
     }
 
-/*    @Transactional(readOnly = true) // 이 메서드 안에서 트랜잭션이 유지되어 정합성을 지켜진다. 외부의 여러번 select 하면 같은 값이 조회된다.
+/*
+    @Transactional(readOnly = true) // 이 메서드 안에서 트랜잭션이 유지되어 정합성을 지켜진다. 외부의 여러번 select 하면 같은 값이 조회된다.
     public User login(User user) {
         return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
     }*/

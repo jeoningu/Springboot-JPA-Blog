@@ -1,7 +1,7 @@
 package com.jig.blog.config.auth;
 
 import com.jig.blog.model.User;
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,7 +15,7 @@ import java.util.Collection;
  *  3. UserDetails 메서드 오버라이딩
  */
 
-@Getter
+@Data
 public class PrincipalDetail implements UserDetails {
     private User user; // 콤포지션 ( 객체를 내부에 품는 것)
 

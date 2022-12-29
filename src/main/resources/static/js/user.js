@@ -72,6 +72,7 @@ let index ={
     update: function () {
         let data = {
             id : $("#id").val(),
+            //username : $("#username").val(), // session update 에 사용됨 ( authentication을 만들어서 session의 SecurityContextHolder의 Context에 넣어주는 방식일 때 사용. 다른 방식으로 userApiController에서 처리)
             password : $("#password").val(),
             email : $("#email").val()
         };

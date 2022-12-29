@@ -1,10 +1,17 @@
 package com.jig.blog.controller.api;
 
+import com.jig.blog.config.auth.PrincipalDetail;
 import com.jig.blog.dto.ResponseDto;
 import com.jig.blog.model.User;
 import com.jig.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,9 +52,17 @@ public class UserApiController {
 //    }
 
     @PutMapping("/user")
-    public ResponseDto<Integer> userUpdate(@RequestBody User user) {
+    public ResponseDto<Integer> userUpdate(@RequestBody User user, @AuthenticationPrincipal PrincipalDetail principalDetail) {
 
-        userService.updateUser(user);
+        userService.updateUser(user, principalDetail);
+
+        /*
+         * session에 변경된 user정보 반영 - 아래 방식 대신 @AuthenticationPrincipal PrincipalDetail principalDetail 을 받아서 service단에서 setUser 해주는 방식으로 함
+
+        // authentication을 만들어서 session의 SecurityContextHolder의 Context에 넣어주는 방식
+        // Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        // SecurityContextHolder.getContext().setAuthentication(authentication);
+        */
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 }
