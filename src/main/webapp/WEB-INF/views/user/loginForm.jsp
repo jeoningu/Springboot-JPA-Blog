@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ include file="../layout/header.jsp"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<spring:eval var="REST_API_KEY" expression="@environment.getProperty('kakao.springboot_blog_project.REST_API_KEY')" />
+<spring:eval var="REDIRECT_URI" expression="@environment.getProperty('kakao.springboot_blog_project.REDIRECT_URI')" />
 
 <div class="container">
     <%-- 스프링 시큐리티에 의한 로그인 요청 --%>
@@ -19,6 +22,7 @@
         </div>--%>
         <%-- form 태그 안의 button은 form 요청을 한다.--%>
     <button id="btn-login" class="btn btn-primary">로그인</button>
+    <a href="https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code"><img height="38px" src="/image/kakao_login_medium_button.png"/></a>
     </form>
 </div>
 

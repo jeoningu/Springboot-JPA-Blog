@@ -1,0 +1,9 @@
+# 커밋 금지 파일
+# REST_API_KEY 빈칸으로 비워  ( 앱 구동시 https://developers.kakao.com/console/app/844803 에서 복사붙여넣기 )
+# REDIRECT_URI 빈칸으로 비워  ( 앱 구동시 https://developers.kakao.com/console/app/844803/product/login 에서 복사붙여넣기 )
+kakao:
+  springboot_blog_project:
+    REST_API_KEY:  # 빈칸으로 커밋, 앱 구동시 https://developers.kakao.com/console/app/844803 에서 복사붙여넣기
+    REDIRECT_URI:  # 빈칸으로 커밋, 앱 구동시 https://developers.kakao.com/console/app/844803/product/login 에서 복사붙여넣기
+    ADMIN_KEY:  # 빈칸으로 커밋, https://developers.kakao.com/console/app/844803  에서 복사붙여넣기
+    PUBLIC_PASSWORD :  test123 # 원래는 빈칸으로 커밋, 정해놓은 특정 값 사용.  TODO: 실제 운영시에도 이런 값으로 oAuth 패스워드를 사용하는지 확인 필요

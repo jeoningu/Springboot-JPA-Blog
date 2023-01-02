@@ -5,17 +5,16 @@ import com.jig.blog.model.RoleType;
 import com.jig.blog.model.User;
 import com.jig.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 
 /**
  * >
  * service가 필요한 이유
- *
+ * <p>
  * 1) 트랜잭션을 관리하기 위함
  * 2) service 의미
  */
@@ -28,7 +27,7 @@ public class UserService {
     private BCryptPasswordEncoder encoder;
 
     @Transactional
-    public void save(User user) {
+    public void joinUser(User user) {
 
         String rawPassword = user.getPassword();
         String encPassword = encoder.encode(rawPassword);
@@ -42,6 +41,12 @@ public class UserService {
 
     @Transactional
     public void updateUser(User user, PrincipalDetail principalDetail) {
+        // validation 체크
+        // 직접 회원가입한 회원이 아닌 경우 수정 못 하게 return
+        if (!StringUtils.hasText(user.getOauth())) {
+            return;
+        }
+
         /*
         수정 시에는 영속성 컨텍스트를 이용한다.
          1. DB에서 SELECT해서 User 오브젝트를 영속성 컨텍스트에 영속화시킨다.
@@ -61,6 +66,14 @@ public class UserService {
 
         // 변경된 회원정보 SESSION에 반영 ( 참고 :  https://azurealstn.tistory.com/92 )
         principalDetail.setUser(persistenceUser);
+    }
+
+    @Transactional(readOnly = true)
+    public User getUser(String username) {
+        User user = userRepository.findByUsername(username).orElseGet(()->{
+            return null;
+        });
+        return user;
     }
 
 /*

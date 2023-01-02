@@ -17,6 +17,9 @@ server:
       force: true
 
 spring:
+  config:
+    import: key_warning_commit.yml
+
   mvc:
     view:
       prefix: /WEB-INF/views/

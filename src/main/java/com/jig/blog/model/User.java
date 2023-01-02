@@ -24,7 +24,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 프로젝트에 연결된 DB의 넘저링 전략을 따라간다.// 오라클 - 시퀀스, MySQL - auto_increment
     private int id;
 
-    @Column(nullable = false, length = 30, unique = true) // nuallable : 필수값, 길이 30
+    @Column(nullable = false, length = 100, unique = true) // nuallable : 필수값, 길이 30
     private String username; // 아이디
 
     @Column(nullable = false, length = 100) // nuallable : 필수값, 길이 100(hash로 비밀번호 암호화하면 길이가 길어짐
@@ -38,6 +38,7 @@ public class User {
     @Enumerated(EnumType.STRING) // enum타입은 db에 없기 때문에 String으로 인식시켜준다.
     private RoleType role;
 
+    private String oauth; // null, kaka
 
     @CreationTimestamp // 시간 자동 입력
     private Timestamp createDate;
