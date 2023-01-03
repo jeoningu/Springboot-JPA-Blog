@@ -1,10 +1,10 @@
 package com.jig.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -48,7 +48,8 @@ public class Board {
     //  One = Board, Many = Reply : 일 대 다 관계이다.// 게시글에서 답글을 같이 조회하고 싶은데,
     // OneToMany는 fetch 기본값이 LAZY라서 EAGER로 바꿔줬따.
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
-    private List<Reply> reply;
+    @JsonIgnoreProperties({"board"}) // Reply에서 board를 다시 조회하지 않겠다. // 순환참조에 의한 무한 호출을 막아준다.
+    private List<Reply> replys;
 
     @CreationTimestamp
     private Timestamp createDate;
