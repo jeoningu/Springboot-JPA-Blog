@@ -34,6 +34,11 @@ public class BoardService {
         return boardRepository.findAll(pageable);
     }
 
+    /**
+     *  글 상세보기
+     * @param id
+     * @return
+     */
     @Transactional(readOnly = true)
     public Board getBoard(int id) {
         return boardRepository.findById(id).orElseThrow(() -> {
@@ -56,5 +61,4 @@ public class BoardService {
         findBoard.setTitle(board.getTitle());
         findBoard.setContent(board.getContent());
     }
-
 }

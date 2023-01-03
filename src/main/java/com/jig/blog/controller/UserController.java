@@ -62,7 +62,7 @@ public class UserController {
 
 
     @GetMapping("/auth/kakao/callback")
-    public  String kakaoCallback(@RequestParam String code  // @ResponseBody를 붙이면 Data를 리턴해주는 컨트롤러함수가 된다.
+    public  String kakaoCallback(@RequestParam String code  // 반환 자료형 앞에 @ResponseBody를 붙이면 Data를 리턴해주는 컨트롤러함수가 된다.
             , @Value("${kakao.springboot_blog_project.REST_API_KEY}") String REST_API_KEY
             , @Value("${kakao.springboot_blog_project.REDIRECT_URI}") String REDIRECT_URI
             ,@Value("${kakao.springboot_blog_project.PUBLIC_PASSWORD}") String PUBLIC_PASSWORD
