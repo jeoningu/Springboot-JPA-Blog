@@ -36,19 +36,23 @@ public class Board {
     private User user; // private String userId; 대신 객체와 @JoinColumn(name="userId")를 사용
 
     /**
-     * ManyToOne 어노테이션을 쓰면 JPA는 한테이블만 조홰해도 가지고 있는 객체에 대해서 join한 결과를 같이 가져온다. ( sql 사에서 select * from Board만 해도 replyList를 join을 한다는 의미 )
+     * @ManyToOne 어노테이션을 쓰면 JPA는 한 테이블만 조홰해도 가지고 있는 객체에 대해서 join한 결과를 같이 가져온다. ( sql 사에서 select * from Board만 해도 replyList를 join을 한다는 의미 )
      * 위와 같이 동작 하는 이유는 fetch 기본값이 FetchType.EAGER이기 때문이다.
      *
-     * oneToMany는 fetch 기본값이 FetchType.LAZY이기 때문에 sql에 join이 포함되지 않는다. 만약 한번에 같이 조회하고 싶다면 fetch를 FetchType.EAGER로 변경하면 된다.
+     * @oneToMany는 fetch 기본값이 FetchType.LAZY이기 때문에 sql에 join이 포함되지 않는다. 만약 한번에 같이 조회하고 싶다면 fetch를 FetchType.EAGER로 변경하면 된다.
      *
-     * mappedBy : 참조관계일 때 부모테이블에서 자식테이블을 조회하기 위한 설정 ( DB에 컬럼 안 만듬),
-     *            '자식 테이블 객체'에서 참조하는 '부모 객체 필드명'을 적으면 된다.
-     * JoinColumn: 참조관계일 때 자식테이블에 FK컬럼을 만들기 위한 설정 ( DB에 컬럼 만듬 )
+     * mappedBy 옵션 : 참조관계일 때 부모테이블에서 자식테이블을 조회하기 위한 설정 ( DB에 컬럼 안 만듬),
+     *                             '자식 테이블 객체'에서 참조하는 '부모 객체 필드명'을 적으면 된다.
+     *  cascade 옵션 : Entity의 상태변화를 전이시킴
+     *   └ REMOVE  - JPA가 관리하는 상태이긴 하지만, 실제 commmit이 일어날 때 삭제가 일어난다. 부모엔티티가 삭제되면 연관된 자식엔티티도 삭제
+     *
+     * @JoinColumn: 참조관계일 때 자식테이블에 FK컬럼을 만들기 위한 설정 ( DB에 컬럼 만듬 )
      */
     //  One = Board, Many = Reply : 일 대 다 관계이다.// 게시글에서 답글을 같이 조회하고 싶은데,
     // OneToMany는 fetch 기본값이 LAZY라서 EAGER로 바꿔줬따.
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)  // board가 삭제되면 reply도 삭제된다.
     @JsonIgnoreProperties({"board"}) // Reply에서 board를 다시 조회하지 않겠다. // 순환참조에 의한 무한 호출을 막아준다.
+    @OrderBy("id desc")
     private List<Reply> replys;
 
     @CreationTimestamp
