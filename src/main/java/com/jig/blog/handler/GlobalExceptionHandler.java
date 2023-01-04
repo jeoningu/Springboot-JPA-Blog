@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 
-// TODO : ResponseEntity 적용 필요할 듯? ajax fail에서 받는게 안 됨.
-@ControllerAdvice
-@RestController
+// TODO : ResponseEntity 적용 필요할 듯? ajax fail에서 받는게 안돼서 일단 주석 처리함.
+//@ControllerAdvice
+//@RestController
 public class GlobalExceptionHandler {
     private Logger log = LoggerFactory.getLogger(getClass());
 
-    @ExceptionHandler(value = Exception.class)
+    //@ExceptionHandler(value = Exception.class)
     public ResponseDto<String> handleArgumentException(Exception e) {
         log.error("{}",e.getStackTrace());
         log.debug("{}",e);
