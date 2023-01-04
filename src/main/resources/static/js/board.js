@@ -9,6 +9,9 @@ let index ={
         $("#btn-update").on("click", () => {
             this.update();
         });
+        $("#btn-reply-save").on("click", () => {
+            this.replySave();
+        });
     },
 
     save: function () {
@@ -77,6 +80,29 @@ let index ={
             alert(JSON.stringify(error));
         });
     },
+    replySave: function () {
+        let boardId = $("#id").text()
+        let data = {
+            content : $("#reply-content").val(),
+        };
+
+        // TODO: content 빈칸 validate 로직 추가 필요
+
+        $.ajax({
+            type : "POST",
+            url : `/api/board/${boardId}/reply`,    // ` 백틱 사용 // boardId를 data에 담지 않고 path방식을 사용하는 이유: id는 path방식으로 주소에 담고 데이터는 body에 담는 방식을 지키기 위함
+            data : JSON.stringify(data),
+            contentType : "application/json; charset=utf-8",
+            dataType: "json"
+
+        }).done(function(resp){
+            alert("댓글이 등록 되었습니다.");
+            location.href ="/board/"+$("#id").text();
+
+        }).fail(function(error){
+            alert(JSON.stringify(error));
+        });
+    }
 };
 
 index.init();

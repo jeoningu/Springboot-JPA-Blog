@@ -1,8 +1,10 @@
 package com.jig.blog.service;
 
 import com.jig.blog.model.Board;
+import com.jig.blog.model.Reply;
 import com.jig.blog.model.User;
 import com.jig.blog.repository.BoardRepository;
+import com.jig.blog.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
+    @Autowired
+    private ReplyRepository replyRepository;
 
     @Transactional
-    public void save(Board board, User user) {
+    public void saveBoard(Board board, User user) {
         board.setCount(0);
         board.setUser(user);
 
@@ -60,5 +64,18 @@ public class BoardService {
 
         findBoard.setTitle(board.getTitle());
         findBoard.setContent(board.getContent());
+    }
+
+    @Transactional
+    public void saveReply(Reply reply, User user, int boardId) {
+
+        Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> {
+            return new IllegalArgumentException("댓글 추가 실패 - 찾을 수 없는 board id 입니다. : " + boardId);
+        });
+
+        reply.setUser(user);
+        reply.setBoard(findBoard);
+
+        replyRepository.save(reply);
     }
 }

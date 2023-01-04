@@ -28,8 +28,8 @@
     <hr/>
 
     <div class="card">
-            <div class="card-body"><textarea class="form-control" rows="1"></textarea> </div>
-            <div class="card-footer"> <button class="btn btn-primary">등록</button></div>
+            <div class="card-body"><textarea id="reply-content" class="form-control" rows="1"></textarea> </div>
+            <div class="card-footer"> <button id="btn-reply-save" class="btn btn-primary">등록</button></div>
     </div>
     <br/>
     <div class="card">
@@ -43,9 +43,7 @@
                         <button class="badge badge-dark">삭제</button>
                     </div>
                 </li>
-
             </c:forEach>
-            ${boad.replys[0].board}
         </ul>
     </div>
 </div>
