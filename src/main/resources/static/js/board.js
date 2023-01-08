@@ -12,6 +12,9 @@ let index ={
         $("#btn-reply-save").on("click", () => {
             this.replySave();
         });
+        $("#btn-modifyReply-save").on("click", () => {
+            this.modifyReplySave();
+        });
     },
 
     save: function () {
@@ -97,6 +100,53 @@ let index ={
 
         }).done(function(resp){
             alert("댓글이 등록 되었습니다.");
+            location.href = `/board/${boardId}`;
+
+        }).fail(function(error){
+            alert(JSON.stringify(error));
+        });
+    },
+
+    replyDelete: function (boardId, replyId) {
+
+        $.ajax({
+            type : "DELETE",
+            url : `/api/board/${boardId}/reply/${replyId}`,    // ` 백틱 사용 // boardId를 data에 담지 않고 path방식을 사용하는 이유: id는 path방식으로 주소에 담고 데이터는 body에 담는 방식을 지키기 위함
+            contentType : "application/json; charset=utf-8",
+            dataType: "json"
+
+        }).done(function(resp){
+            alert("댓글이 삭제 되었습니다.");
+            location.href ="/board/"+$("#id").text();
+
+        }).fail(function(error){
+            alert(JSON.stringify(error));
+        });
+    },
+
+    replyUpdate: function (boardId, replyId) {
+        $(`#reply-${replyId}`).css('display', 'none');
+        $(`#modifyReply-${replyId}`).css('display', ' block');
+
+
+    },
+
+    modifyReplySave: function () {
+        let boardId = $("#id").text();
+        let replyId = $("#modifyReply-id").val();
+        let data = {
+            content : $("#modifyReply-content").val(),
+        };
+
+        $.ajax({
+            type : "PUT",
+            url : `/api/board/${boardId}/reply/${replyId}`,    // ` 백틱 사용 // boardId를 data에 담지 않고 path방식을 사용하는 이유: id는 path방식으로 주소에 담고 데이터는 body에 담는 방식을 지키기 위함
+            contentType : "application/json; charset=utf-8",
+            data : JSON.stringify(data),
+            dataType: "json"
+
+        }).done(function(resp){
+            alert("댓글이 수정 되었습니다.");
             location.href ="/board/"+$("#id").text();
 
         }).fail(function(error){

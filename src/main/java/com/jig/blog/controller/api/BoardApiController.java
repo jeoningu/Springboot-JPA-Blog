@@ -39,7 +39,22 @@ public class BoardApiController {
 
     @PostMapping("/api/board/{boardId}/reply")
     public ResponseDto<Integer> saveReply(@PathVariable int boardId, @RequestBody Reply reply, @AuthenticationPrincipal PrincipalDetail principalDetail) {
-        boardService.saveReply(reply, principalDetail.getUser(), boardId);
+        boardService.saveReply(boardId, reply, principalDetail.getUser());
+
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
+    @DeleteMapping("/api/board/{boardId}/reply/{replyId}")   // boardId는 사용 x, 주소 모양을 규칙적으로 만들기 위함.
+    public ResponseDto<Integer> removeReply( @PathVariable int replyId) {
+        boardService.removeReply(replyId);
+
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
+    @PutMapping("/api/board/{boardId}/reply/{replyId}")   // boardId는 사용 x, 주소 모양을 규칙적으로 만들기 위함.
+    public ResponseDto<Integer> modifyReply( @PathVariable int replyId, @RequestBody Reply reply) {
+        System.out.println("BoardApiController.modifyReply");
+        boardService.modifyReply(replyId, reply);
 
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }

@@ -34,14 +34,30 @@
     <br/>
     <div class="card">
         <div class="card-header">댓글 리스트</div>
-        <ul id="reply--box" class="list-group">
+        <ul id="reply-box" class="list-group">
             <c:forEach var="reply" items="${board.replys}" >
-                <li id="reply--1" class="list-group-item d-flex justify-content-between">
-                    <div>${reply.content}</div>
-                    <div class="d-flex">
-                        <div class="font-italic">작성자 : ${reply.user.username}&nbsp;</div>
-                        <button class="badge badge-dark">삭제</button>
+                <li  class="list-group-item ">
+                    <div id="reply-${reply.id}">
+                        <div class="d-flex justify-content-between">
+                            <div>${reply.content}</div>
+                            <div class="d-flex">
+                                <div class="font-italic">작성자 : ${reply.user.username}&nbsp;</div>
+                                <c:if test="${reply.user.id == principal.user.id}">
+                                    <button onclick="index.replyUpdate(${board.id}, ${reply.id})" class="badge badge-dark">수정</button>
+                                    <button onclick="index.replyDelete(${board.id}, ${reply.id})" class="badge badge-dark">삭제</button>
+                                </c:if>
+                            </div>
+                        </div>
                     </div>
+                    <c:if test="${reply.user.id == principal.user.id}">
+                        <div id="modifyReply-${reply.id}" class="card"  style="display: none" >
+                            <form>
+                                <input type="hidden" id="modifyReply-id" value="${reply.id}">
+                                <div class="card-body"><textarea id="modifyReply-content" class="form-control" rows="1">${reply.content}</textarea> </div>
+                                <div class="card-footer"> <button id="btn-modifyReply-save" class="btn btn-primary">등록</button></div>
+                            </form>
+                        </div>
+                    </c:if>
                 </li>
             </c:forEach>
         </ul>
