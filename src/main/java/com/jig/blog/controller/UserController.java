@@ -111,8 +111,9 @@ public class UserController {
         // HttpBody  오브젝트 생성
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
         //  property_keys 포함시 400error(파싱 문제인듯?) 반환됨.
-        //params.add("property_keys", new String[]{"kakao_account.profile", "kakao_account.name","kakao_account.email"});
-
+        // params.add("property_keys", new String[]{"kakao_account.profile", "kakao_account.name","kakao_account.email"});
+        // 카카오에 문의 결과 : 'String[]'가 아니라 String 형식으로 '[]모양의 문자열' 형태로 보내야 함
+        params.add("property_keys", "[\"kakao_account.profile\",\"kakao_account.name\",\"kakao_account.email\"]");
         // HttpHeader와 HttpBody를 하나의 오브젝트에 담기 ( 이유 : exchange에서 HttpEntity<?>를 받기 때문)
         HttpEntity<MultiValueMap<String, Object>> kakaoUserInfoRequest =
                 new HttpEntity<>(params, headers);
