@@ -42,8 +42,8 @@ public class UserService {
     @Transactional
     public void updateUser(User user, PrincipalDetail principalDetail) {
         // validation 체크
-        // 직접 회원가입한 회원이 아닌 경우 수정 못 하게 return
-        if (!StringUtils.hasText(user.getOauth())) {
+        // Oauth 회원인 경우 수정 못 하게 return
+        if (StringUtils.hasText(user.getOauth())) {
             return;
         }
 
