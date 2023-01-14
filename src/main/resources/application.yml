@@ -17,6 +17,20 @@ server:
       force: true
 
 spring:
+  # 스프링에서 js 파일 변경시 자동 반영
+#  devtools:
+#    livereload:
+#      enabled: true
+#    remote:
+#      restart:
+#        enabled: true
+#    restart:
+#      enabled: true
+  #  freemarker:
+#    cache: false
+#  thymeleaf:
+#    cache: false
+
   config:
     import: key_warning_commit.yml
 
@@ -47,16 +61,6 @@ spring:
     # 콘솔에 sql 정렬
     properties:
       hibernate.format_sql: true
-
-  # 스프링에서 js 파일 변경시 자동 반영
-#  devtools:
-#    livereload:
-#      enabled: true
-#  freemarker:
-#    cache: false
-#  thymeleaf:
-#    cache: false
-
 
   jackson:
     serialization:
