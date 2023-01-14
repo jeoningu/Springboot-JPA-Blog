@@ -8,7 +8,7 @@ logging:
         blog: debug
 
 server:
-  port: 8000
+  port: 8080
   servlet:
     context-path:
     encoding:
