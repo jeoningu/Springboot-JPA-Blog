@@ -41,11 +41,6 @@ public class UserService {
 
     @Transactional
     public void updateUser(User user, PrincipalDetail principalDetail) {
-        // validation 체크
-        // Oauth 회원인 경우 수정 못 하게 return
-        if (StringUtils.hasText(user.getOauth())) {
-            return;
-        }
 
         /*
         수정 시에는 영속성 컨텍스트를 이용한다.
@@ -58,6 +53,12 @@ public class UserService {
         User persistenceUser = userRepository.findById(user.getId()).orElseThrow(() -> {
             return new IllegalArgumentException("회원 수정 실패 - 회원 id를 찾을 수 없습니다. : " + user.getId());
         });
+
+        // validation 체크
+        // Oauth 회원인 경우 수정 못 하게 return
+        if (StringUtils.hasText(persistenceUser.getOauth())) {
+            return;
+        }
 
         String rawPassword = user.getPassword();
         String encPassword = encoder.encode(rawPassword);
