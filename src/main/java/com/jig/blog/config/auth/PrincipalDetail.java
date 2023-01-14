@@ -4,9 +4,11 @@ import com.jig.blog.model.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * 스프링 시큐리티에서 사용하는 User객체에 직접 만든 User객체를 설정해준다.
@@ -16,11 +18,18 @@ import java.util.Collection;
  */
 
 @Data
-public class PrincipalDetail implements UserDetails {
+public class PrincipalDetail implements UserDetails, OAuth2User {
     private User user; // 콤포지션 ( 객체를 내부에 품는 것)
+
+    private Map<String, Object> attributes;
 
     public PrincipalDetail(User user) {
         this.user = user;
+    }
+
+    public PrincipalDetail(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
     }
 
     /**
@@ -94,5 +103,15 @@ public class PrincipalDetail implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }

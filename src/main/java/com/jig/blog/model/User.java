@@ -1,21 +1,16 @@
 package com.jig.blog.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 // ORM : Object와 관계형 데이터베이스의 테이블을 자동으로 매핑해주는 기술
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder // 빌더 패턴!!
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@AllArgsConstructor
+//@Builder // 빌더 패턴!!
 @Entity // User 클래스에 대해서 MySQL에 테이블을 생성한다.
 //@DynamicInsert // User 클래스 insert SQL 에서 값이 null인 필드는 빼준다.
 public class User {
@@ -38,10 +33,20 @@ public class User {
     @Enumerated(EnumType.STRING) // enum타입은 db에 없기 때문에 String으로 인식시켜준다.
     private RoleType role;
 
-    private String oauth; // null, kaka
+    private String provider; // 어떤 OAuth2 인증인지 ex)google, naver, kakao, facebook    (일반 회원이면 null)
+
+    private String providerId; // OAuth2 인증에서 사용되는 각 유저의 primary key ex)google에서는 sub값
 
     @CreationTimestamp // 시간 자동 입력
     private Timestamp createDate;
 
-
+    @Builder
+    public User(String username, String password, String email, RoleType role, String provider, String providerId) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
 }

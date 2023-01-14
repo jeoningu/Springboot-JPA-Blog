@@ -12,7 +12,7 @@
             <input type="text" value="${principal.user.username}" class="form-control" placeholder="Enter username" id="username" readonly>
         </div>
         <c:choose>
-            <c:when test="${empty principal.user.oauth}">
+            <c:when test="${empty principal.user.provider}">
                 <div class="form-group">
                     <label for="password">Password:</label>
                     <input type="password" class="form-control" placeholder="Enter password" id="password">

@@ -56,7 +56,7 @@ public class UserService {
 
         // validation 체크
         // Oauth 회원인 경우 수정 못 하게 return
-        if (StringUtils.hasText(persistenceUser.getOauth())) {
+        if (StringUtils.hasText(persistenceUser.getProvider())) {
             return;
         }
 
