@@ -1,0 +1,52 @@
+//package com.jig.blog.config.security.springsecurityAjaxLoginBackup;
+//
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.http.MediaType;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+//import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+//import org.springframework.security.web.savedrequest.RequestCache;
+//import org.springframework.security.web.savedrequest.SavedRequest;
+//
+//import javax.servlet.ServletException;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletResponse;
+//import java.io.IOException;
+//
+//public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+//	
+//	private ObjectMapper objectMapper = new ObjectMapper();
+//	
+//	@Override
+//	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//		/*강제 인터셉트 당했을 경우의 데이터 get*/
+//		RequestCache requestCache = new HttpSessionRequestCache();
+//		SavedRequest savedRequest = requestCache.getRequest(request, response);
+//
+//		/*로그인 버튼 눌러 접속했을 경우의 데이터 get*/
+//		String prevPage = (String) request.getSession().getAttribute("prevPage");
+//
+//		//url 기본 값
+//		String url = "/";
+//
+//		/*이전 페이지가 접근 제한 페이지일 경우*/
+//		if (savedRequest != null) {
+//			url = savedRequest.getRedirectUrl();
+//		/*로그인 버튼 눌러서 접근한 경우*/
+//		} else if (prevPage != null) {
+//			url = prevPage;
+//		}
+//
+//		response.setStatus(HttpStatus.OK.value());
+//		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//		response.setCharacterEncoding("UTF-8");
+//		response.sendRedirect(url);
+//		/*
+//		리다이렉트 해주면 로그인 다음 화면으로 이동됨
+//		User user = (User) authentication.getPrincipal();
+//		objectMapper.writeValue(response.getWriter(), authentication.getPrincipal());
+//		*/
+//
+//	}
+//}

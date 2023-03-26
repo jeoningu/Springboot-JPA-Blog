@@ -18,8 +18,9 @@
 
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+	<link href="/css/basic.css?after" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
 	<a class="navbar-brand" href="/">🏠게시판</a>
@@ -47,14 +48,17 @@
 						<a class="nav-link" href="/user/updateForm">회원정보</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/logout">로그아웃</a>
+						<a class="nav-link" href="#" onclick="funcLogout()" <%--href="/logout"--%>>로그아웃</a>
 					</li>
 				</ul>
+				<input type="hidden" id="principalUserId" value="${principal.user.id}"/>
 			</c:otherwise>
 		</c:choose>
 
-
-
 	</div>
 </nav>
+<div id="toast">
+</div>
 <br/>
+<script src="/js/header.js"></script>
+<script src="/js/module/ux/ToastrMessageQueue.js"></script>

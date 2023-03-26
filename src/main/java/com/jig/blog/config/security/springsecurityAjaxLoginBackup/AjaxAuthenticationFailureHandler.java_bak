@@ -1,0 +1,81 @@
+//package com.jig.blog.config.security.springsecurityAjaxLoginBackup;
+//
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import org.springframework.security.core.AuthenticationException;
+//import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+//
+//import javax.servlet.ServletException;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletResponse;
+//import java.io.IOException;
+//import java.io.PrintWriter;
+//import java.util.HashMap;
+//import java.util.Map;
+//
+//
+//public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHandler {
+//	
+//	private final ObjectMapper objectMapper = new ObjectMapper();
+//	private final String DEFAULT_FAILURE_URL = "/account/login?error=true";
+//	@Override
+//	public void onAuthenticationFailure(HttpServletRequest request,
+//										HttpServletResponse response,
+//										AuthenticationException exception) throws IOException, ServletException {
+//
+//		String loginFailMsg=null;
+//		
+//
+////		if (exception instanceof BadCredentialsException ) {
+////			loginFailMsg = "Invalid Username Or Password";
+////		} else if (exception instanceof InsufficientAuthenticationException ) {
+////			loginFailMsg = "Locked";
+////		} else if (exception instanceof CredentialsExpiredException) {
+////			loginFailMsg = "Expired password";
+////		}
+////
+////		Map<String, Object> map = new HashMap<String, Object>();
+////		map.put("success", false);
+////		map.put("message", loginFailMsg);
+////
+////		// {"success" : false, "message" : "..."}
+////		String jsonString = objectMapper.writeValueAsString(map);
+////		response.setContentType("application/json"); // Content-Type을 application/json으로 설정
+////		OutputStream out = response.getOutputStream();
+////		out.write(jsonString.getBytes());
+//
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("success", false);
+//		map.put("message", loginFailMsg);
+//
+//		// {"success" : false, "message" : "..."}
+//		String jsonString = objectMapper.writeValueAsString(map);
+//
+//		response.setContentType("application/json"); // Content-Type을 application/json으로 설정
+//
+//		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // HTTP 응답 상태 코드를 함께 보내주어야 합니다.
+//
+//		PrintWriter out = response.getWriter();
+//		out.print(jsonString);
+//		out.flush();
+//		out.close();
+////
+////		ResponseDto<String> responseDataDTO = new ResponseDto<String>(HttpStatus.UNAUTHORIZED.value(), loginFailMsg);
+////		responseDataDTO.setStatus(HttpStatus.UNAUTHORIZED.value());
+////
+////		response.setCharacterEncoding("UTF-8");
+////		response.setStatus(HttpServletResponse.SC_OK);
+////		response.getWriter().print(objectMapper.writeValueAsString(responseDataDTO));
+////		response.getWriter().flush();
+//
+//
+//
+////		response.setStatus(HttpStatus.UNAUTHORIZED.value());
+////		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//
+////		request.setAttribute("loginFailMsg", loginFailMsg);
+////		request.getRequestDispatcher("/").forward(request,response);
+//
+//		//objectMapper.writeValue(response.getWriter(), errMsg);
+//		
+//	}
+//}

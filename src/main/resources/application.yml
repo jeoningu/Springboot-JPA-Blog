@@ -15,12 +15,15 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+    jsp:
+      init-parameters:
+        development: true
 
 spring:
-  # 스프링에서 js 파일 변경시 자동 반영
-#  devtools:
-#    livereload:
-#      enabled: true
+  # 스프링에서 js 파일 변경시 자동 반영.. 안되는데?
+  devtools:
+    livereload:
+      enabled: true
 #    remote:
 #      restart:
 #        enabled: true
@@ -34,6 +37,18 @@ spring:
   config:
     import: key_warning_commit.yml
 
+  rabbitmq:
+    username: guest
+    password: guest
+    port: 5672  # 왜15672가 아니지?
+    host: localhost
+#    virtualHost: levi.vhost
+#    routeKey: test.route
+#    exchangeName: test.exchange
+#    queueName: testQueue
+#    deadLetterExchange: dead.letter.exchange
+#    deadLetterRouteKey: dead.letter.route
+
   mvc:
     view:
       prefix: /WEB-INF/views/
@@ -46,13 +61,13 @@ spring:
     password: root
 
   jpa:
-    open-in-view: true
+    open-in-view: false # sse 주의사항으로 false설정을 권장함.
     hibernate:
       #create : 서버 시작시마다 DB초기화, update : 수정사항만 DB에 반영, none : 동작 안 함
       ddl-auto: update
       naming:
         # org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl : 변수명 그대로 테이블에 필드로 만듬
-        # org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy : userRole ->  user_role 소문자와 언더바로 구성된 필드로 만듬
+        # org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy : 소문자와 언더바로 구성된 필드로 만듬
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       # true : jpa가 사용하는 기본 넘버링 전략을 사용, false : 기본 넘버링 전략 사용 안 함(각 클래스에서 설정?)
       use-new-id-generator-mappings: false

@@ -1,0 +1,55 @@
+package com.jig.blog.config.ServerSentEvents.backup;
+
+import java.io.IOException;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+/**
+ * spring framework 4.2부터 SSE 통신을 지원하는 SseEmitter API를 제공합니다. 이를 이용해 SSE 구독 요청에 대한 응답을 할 수 있습니다.
+ *
+ * 생성자를 통해 만료시간을 설정할 수 있습니다. 디폴트 값은 서버에 따라 다릅니다. 스프링 부트의 내장 톰캣을 사용하면 30초로 설정됩니다. 만료시간이 되면 브라우저에서 자동으로 서버에 재연결 요청을 보냅니다.
+ * 이때 생성된 SseEmitter 객체는 향후 이벤트가 발생했을 때, 해당 클라이언트로 이벤트를 전송하기 위해 사용되므로 서버에서 저장하고 있어야 합니다.
+ * 주의해야할 점은 Emitter를 생성하고 나서 만료 시간까지 아무런 데이터도 보내지 않으면 재연결 요청시 503 Service Unavailable 에러가 발생할 수 있습니다. 따라서 처음 SSE 연결 시 더미 데이터를 전달해주는 것이 안전합니다.
+ *
+ * 이제 서버에서 무언가 변경 사항이 생겼을 때, 클라이언트의 요청이 없어도 데이터를 전송할 수 있습니다. 본 예시에서는 누군가 /count를 호출하면 서버에 저장된 숫자를 1 증가시키고 이를 SSE 커넥션이 열려있는 모든 클라이언트에게 전달하도록 해보겠습니다.
+ */
+@RestController
+@Slf4j
+public class SSeController_bak {
+
+    private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
+
+    private final SseEmitters_bak sseEmitters;
+
+    public SSeController_bak(SseEmitters_bak sseEmitters) {
+        this.sseEmitters = sseEmitters;
+    }
+
+    @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public ResponseEntity<SseEmitter> connect() {
+        log.info( "{}", "SseEmitter connect!!!");
+        SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);  // 만료시간이 되면 브라우저에서 자동으로 서버에 재연결 요청을 보냅니다.
+        sseEmitters.add(emitter);
+        try {
+            emitter.send(SseEmitter.event()
+                    .name("connect")   // 해당 이벤트의 이름 지정
+                    .data("connected")); // 503 에러 방지를 위한 더미 데이터
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.ok(emitter);
+    }
+
+    @PostMapping("/count")
+    public ResponseEntity<Void> count() {
+        log.info( "{}", "SseEmitter count!!!");
+        sseEmitters.count();
+        return ResponseEntity.ok().build();
+    }
+}

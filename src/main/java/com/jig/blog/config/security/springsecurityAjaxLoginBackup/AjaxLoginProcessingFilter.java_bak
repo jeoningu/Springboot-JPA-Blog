@@ -1,0 +1,49 @@
+//package com.jig.blog.config.security.springsecurityAjaxLoginBackup;
+//
+//import com.fasterxml.jackson.databind.ObjectMapper;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.AuthenticationException;
+//import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+//import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+//
+//import javax.servlet.ServletException;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletResponse;
+//import java.io.IOException;
+//
+//import static org.springframework.http.HttpMethod.POST;
+//
+//public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingFilter {
+//	
+//	private ObjectMapper objectMapper = new ObjectMapper();
+//	
+//	public AjaxLoginProcessingFilter() {
+//    	// 작동 조건은 잘~~ 써야 한다!
+//		super(new AntPathRequestMatcher("/auth/loginProc", POST.name()));
+//	}
+//	
+//	@Override
+//	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+//		
+////		if (!isAjax(request)) {
+////			throw new IllegalStateException("Authentication is not supported");
+////		}
+////
+////		User accountDto = objectMapper.readValue(request.getReader(), User.class);
+////		if (!StringUtils.hasText(accountDto.getUsername())
+////			|| !StringUtils.hasText(accountDto.getPassword())) {
+////			throw new IllegalArgumentException("username or password is empty");
+////		}
+////
+////		AjaxAuthenticationToken ajaxAuthenticationToken
+////			= new AjaxAuthenticationToken(accountDto.getUsername(), accountDto.getPassword());
+//		AjaxAuthenticationToken ajaxAuthenticationToken
+//			= new AjaxAuthenticationToken(request.getParameter("username"), request.getParameter("password"));
+//		
+//		return getAuthenticationManager().authenticate(ajaxAuthenticationToken);
+//	}
+//	
+//	private boolean isAjax(HttpServletRequest request) {
+//		return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+//	}
+//}

@@ -25,6 +25,25 @@
 		</dependency>
 
 		<!-- 추가 라이브러리 시작-->
+<!--		&lt;!&ndash; websocket 라이브러리&ndash;&gt;
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-reactor-netty</artifactId>
+		</dependency>
+		&lt;!&ndash; rabbitMQ  라이브러리&ndash;&gt;
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>-->
+		<!-- 프로퍼티 읽기 라이브러리-->
+<!--		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+		</dependency>-->
 		<!-- 시큐리티 태그 라이브러리 -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>

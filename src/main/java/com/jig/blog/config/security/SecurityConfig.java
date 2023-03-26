@@ -1,9 +1,6 @@
 package com.jig.blog.config.security;
 
-import com.jig.blog.config.security.springsecurityAjaxLoginBackup.AjaxAuthenticationFailureHandler;
-import com.jig.blog.config.security.springsecurityAjaxLoginBackup.AjaxAuthenticationProvider;
-import com.jig.blog.config.security.springsecurityAjaxLoginBackup.AjaxAuthenticationSuccessHandler;
-import com.jig.blog.config.security.springsecurityAjaxLoginBackup.AjaxLoginProcessingFilter;
+
 import com.jig.blog.config.security.oauth.PrincipalOauth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
