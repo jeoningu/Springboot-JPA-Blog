@@ -1,14 +1,20 @@
 package com.jig.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
@@ -29,7 +35,7 @@ public class Board {
     private String content; // 섬머노트라는 라이브러리를 사용하면 일반적으로 적은 글이 <html>태그가 섞여서 디자인 됨. 따라서 데이터 용량이 커지기 때문에 대용량 데이터가 필요
 
     // 직접 넣어주자. @ColumnDefault("0")  // int니까 ''으로 감싸줄 필요 없음
-    private int count;
+    private int count; // 조회수
 
     @ManyToOne // Many = Board, One = User,  다 대 일 관계
     @JoinColumn(name = "userId")// 관계형 데이터베이스는 객체를 저장하는게 아니라 foreign key를 사용하지만 ORM에서는 객체를 저장할 수 있다. 이 때, 조인 컬럼을 지정해준다.
@@ -55,7 +61,24 @@ public class Board {
     @OrderBy("id desc")
     private List<Reply> replys;
 
-    @CreationTimestamp
-    private Timestamp createDate;
+    @CreatedDate
+//    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
+//    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone="Asia/Seoul")
+    private String createdDate;
 
+    @LastModifiedDate   // 데이터 수정할 때 시간 자동 수정
+//    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+//    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    private String modifiedDate;
+
+    @PrePersist
+    public void onPrePersist(){
+        this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+        this.modifiedDate = this.createdDate;
+    }
+
+    @PreUpdate
+    public void onPreUpdate(){
+        this.modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+    }
 }

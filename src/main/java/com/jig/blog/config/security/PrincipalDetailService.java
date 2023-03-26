@@ -1,4 +1,4 @@
-package com.jig.blog.config.auth;
+package com.jig.blog.config.security;
 
 import com.jig.blog.model.User;
 import com.jig.blog.repository.UserRepository;

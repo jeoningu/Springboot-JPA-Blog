@@ -1,17 +1,25 @@
-package com.jig.blog.config;
+package com.jig.blog.config.security;
 
-import com.jig.blog.config.auth.PrincipalDetailService;
-import com.jig.blog.config.oauth.PrincipalOauth2UserService;
+import com.jig.blog.config.security.springsecurityAjaxLoginBackup.AjaxAuthenticationFailureHandler;
+import com.jig.blog.config.security.springsecurityAjaxLoginBackup.AjaxAuthenticationProvider;
+import com.jig.blog.config.security.springsecurityAjaxLoginBackup.AjaxAuthenticationSuccessHandler;
+import com.jig.blog.config.security.springsecurityAjaxLoginBackup.AjaxLoginProcessingFilter;
+import com.jig.blog.config.security.oauth.PrincipalOauth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import javax.annotation.PostConstruct;
 
 /**
  * 스프링 시큐리티 기본 설정
@@ -19,6 +27,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration // 싱글톤 스프링 빈 등록
 @EnableWebSecurity // 시큐리티 필터 등록
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 특정 주소로 접근 하면 권한 및 인증을 미리 체크
+@Order(1) // ??
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 // PwdConfig.java로 이전
@@ -31,14 +40,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        return new BCryptPasswordEncoder();
 //    }
 //
-//    @Autowired
-//    private PrincipalDetailService principalDetailService;
+    @Autowired
+    private PrincipalDetailService principalDetailService;
 
 
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @PostConstruct
+    private void init() {
+        System.out.println("SecurityConfig.init");
     }
 
     @Autowired
@@ -58,27 +72,53 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //     * @param auth
 //     * @throws Exception
 //     */
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//
-//        // 로그인 할 때 패스워드를 encoderPWD()로 인코드 하고 principalDetailService로 username, password 처리 (DB와 비교)를 한다.
-//        auth.userDetailsService(principalDetailService).passwordEncoder(encoderPWD());
-//    }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //auth.authenticationProvider(ajaxAuthenticationProvider());
+        // 로그인 할 때 패스워드를 encoderPWD()로 인코드 하고 principalDetailService로 username, password 처리 (DB와 비교)를 한다.
+        auth.userDetailsService(principalDetailService)/*.passwordEncoder(encoderPWD())*/;
+    }
+
+ /*   @Bean
+    public AuthenticationProvider ajaxAuthenticationProvider() {
+        return new AjaxAuthenticationProvider();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler ajaxAuthenticationSuccessHandler() {
+        return new AjaxAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler ajaxAuthenticationFailureHandler() {
+        return new AjaxAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public AjaxLoginProcessingFilter ajaxLoginProcessingFilter() throws Exception {
+        AjaxLoginProcessingFilter ajaxLoginProcessingFilter = new AjaxLoginProcessingFilter();
+        ajaxLoginProcessingFilter.setAuthenticationManager(authenticationManagerBean());
+        ajaxLoginProcessingFilter.setAuthenticationSuccessHandler(ajaxAuthenticationSuccessHandler());
+        ajaxLoginProcessingFilter.setAuthenticationFailureHandler(ajaxAuthenticationFailureHandler());
+        return ajaxLoginProcessingFilter;
+    }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .csrf().disable()// csrf 토큰 비활성화 ( 테스트 시에 설정 필요 )
             .authorizeRequests()
-                .antMatchers("/", "/auth/**", "/js/**", "/css/**", "/image/**")  // 이 경로로 들어오면    ( "/auth/loginForm", "/auth/joinForm" )
+                .antMatchers("/", "/auth/**", "/js/**", "/css/**", "/image/**", "/subscribe/*")  // 이 경로로 들어오면    ( "/auth/loginForm", "/auth/joinForm" )
                 .permitAll()                         // 누구나 허용
                 .anyRequest()    // 위 경로가 아닌 요청은
                 .authenticated() // 인증이 필요하다
-            .and()               // 그리고
+            .and()
+                //.addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .formLogin()     // 위 경로가 아닌 요청은 로그인 페이지로 이동시키고
                 .loginPage("/auth/loginForm") // 로그인 페이지는 이 경로로 하겠다.
                 .loginProcessingUrl("/auth/loginProc") // 스프링 시큐리티가 이 요청을 가로채서 대신 로그인 해준다. UserDetails 상속 객체 필요(직접 controller 구현 필요없음)
                 .defaultSuccessUrl("/") // 정상 로그인 후 이동되는 경로
+                //.usernameParameter("id") // form의 name을 변경합니다. 이 부분은 없어도 되며, 그럼 default는 'username' 입니다.
             .and()
                 .oauth2Login()
                 .loginPage("/auth/loginForm")   // 로그인 페이지는 이 경로로 하겠다.

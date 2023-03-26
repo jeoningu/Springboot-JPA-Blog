@@ -1,23 +1,23 @@
-package com.jig.blog.config.oauth.provider;
+package com.jig.blog.config.security.oauth.provider;
 
 import java.util.Map;
 
-public class FacebookUserInfo implements OAuth2UserInfo{
+public class GoogleUserInfo implements OAuth2UserInfo{
 
     private Map<String, Object> attributes; // super.loadUser(userRequest).getAttributes()로 받음
 
-    public FacebookUserInfo(Map<String, Object> attributes) {
+    public GoogleUserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 
     @Override
     public String getProviderId() {
-        return (String)attributes.get("id");
+        return (String)attributes.get("sub");
     }
 
     @Override
     public String getProvider() {
-        return "facebook";
+        return "google";
     }
 
     @Override

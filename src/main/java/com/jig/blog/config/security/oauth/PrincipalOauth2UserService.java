@@ -1,7 +1,7 @@
-package com.jig.blog.config.oauth;
+package com.jig.blog.config.security.oauth;
 
-import com.jig.blog.config.auth.PrincipalDetail;
-import com.jig.blog.config.oauth.provider.*;
+import com.jig.blog.config.security.PrincipalDetail;
+import com.jig.blog.config.security.oauth.provider.*;
 import com.jig.blog.model.RoleType;
 import com.jig.blog.model.User;
 import com.jig.blog.repository.UserRepository;
@@ -87,6 +87,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         // TODO: OAuth2 회원가입인 경우 패스워드에 특정값을 넣어줘서 노출되는 경우 모든 OAuth 회원이 노출되게 되는 문제가 있음. 해결 필요함
         String password = bCryptPasswordEncoder.encode("특정값");
         String email = oAuth2UserInfo.getEmail();
+        String name =  oAuth2UserInfo.getName();
         String role = "ROLE_USER";
 
         // 회원등록이 안됐으면 회원가입
@@ -96,6 +97,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .username(username)
                     .password(password)
                     .email(email)
+                    .name(name)
                     .role(RoleType.USER)
                     .provider(provider)
                     .providerId(providerId)

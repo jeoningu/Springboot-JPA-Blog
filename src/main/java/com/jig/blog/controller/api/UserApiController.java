@@ -1,6 +1,6 @@
 package com.jig.blog.controller.api;
 
-import com.jig.blog.config.auth.PrincipalDetail;
+import com.jig.blog.config.security.PrincipalDetail;
 import com.jig.blog.dto.ResponseDto;
 import com.jig.blog.model.User;
 import com.jig.blog.service.UserService;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 
-// TODO : ResponseEntity 적용 필요할 듯? ajax fail에서 받는게 안돼서 일단 주석 처리함.
+// TODO : ajax fail에서 받는게 안돼서 일단 주석 처리함. (  ResponseEntity 검색해보자 )
 //@ControllerAdvice
 //@RestController
 public class GlobalExceptionHandler {

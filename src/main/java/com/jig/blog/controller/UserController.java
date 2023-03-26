@@ -1,29 +1,11 @@
 package com.jig.blog.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jig.blog.model.KakaoToken;
-import com.jig.blog.model.KakaoUserInfoResponse;
-import com.jig.blog.model.User;
 import com.jig.blog.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 
 /**
@@ -39,8 +21,8 @@ public class UserController {
     @Autowired
     private  UserService userService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+//    @Autowired
+//    private AuthenticationManager authenticationManager;
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -73,9 +55,9 @@ public class UserController {
 //        // TODO: 아래 과정을 service단으로 옮길 필요는 없는 건지? (@Transactional 처리)
 //
 //        // 카카오 토큰 요청
-//        KakaoToken KakaoToken = getKakaoTokenRequest(code, REST_API_KEY, REDIRECT_URI);
+//        KakaoToken_bak KakaoToken_bak = getKakaoTokenRequest(code, REST_API_KEY, REDIRECT_URI);
 //        // 카카오 사용자 정보 요청
-//        KakaoUserInfoResponse kakaoUserInfo = getKakaoUserInfoRequest(KakaoToken);
+//        KakaoUserInfoResponse_bak kakaoUserInfo = getKakaoUserInfoRequest(KakaoToken_bak);
 //
 //        // TODO : Oauth2 Client로 사용안하게 될 메서드라서 providerId 추가 안함.
 //        User user = User.builder()
@@ -153,7 +135,7 @@ public class UserController {
 //     * @param REDIRECT_URI
 //     * @return
 //     */
-//    private KakaoToken getKakaoTokenRequest(String code, String REST_API_KEY, String REDIRECT_URI) {
+//    private KakaoToken_bak getKakaoTokenRequest(String code, String REST_API_KEY, String REDIRECT_URI) {
 //        // HttpHeader 오브젝트 생성
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -180,9 +162,9 @@ public class UserController {
 //
 //        // Json데이터 파싱 라이브러리 사용 ( 예시)Gson, Json Simple, ObjectMapper)
 //        ObjectMapper objectMapper = new ObjectMapper();
-//        KakaoToken kakaoToken = null;
+//        KakaoToken_bak kakaoToken = null;
 //        try { // readValue(파싱) 과정에서 데이터 받는 클래스의 변수명이 다르거나 setter가 없는 경우 error 발생! try-catch문으로 처리
-//            kakaoToken = objectMapper.readValue(response.getBody(), KakaoToken.class);
+//            kakaoToken = objectMapper.readValue(response.getBody(), KakaoToken_bak.class);
 //        } catch (JsonProcessingException e) {
 //            logger.error("{}", e);
 //        }

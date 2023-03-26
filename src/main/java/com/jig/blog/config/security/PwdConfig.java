@@ -1,4 +1,4 @@
-package com.jig.blog.config;
+package com.jig.blog.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

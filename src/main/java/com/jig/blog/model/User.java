@@ -26,6 +26,9 @@ public class User {
     private String password;
 
     @Column(nullable = false, length = 50) // nuallable : 필수값, 길이 50
+    private String name;
+
+    @Column(nullable = false, length = 50) // nuallable : 필수값, 길이 50
     private String email;
 
     // 방법 1. @ColumnDefault("'user'") // db에서 varchar로 받을 기본값은 ''으로 감싸준다. // insert에 기본값을 넣어주려면 클래스에 @DynamicInsert을 설정해줘야한다.
@@ -41,9 +44,10 @@ public class User {
     private Timestamp createDate;
 
     @Builder
-    public User(String username, String password, String email, RoleType role, String provider, String providerId) {
+    public User(String username, String password, String name, String email, RoleType role, String provider, String providerId) {
         this.username = username;
         this.password = password;
+        this.name = name;
         this.email = email;
         this.role = role;
         this.provider = provider;

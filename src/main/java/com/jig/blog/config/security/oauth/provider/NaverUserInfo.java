@@ -1,4 +1,4 @@
-package com.jig.blog.config.oauth.provider;
+package com.jig.blog.config.security.oauth.provider;
 
 import java.util.Map;
 

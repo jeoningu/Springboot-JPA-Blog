@@ -1,6 +1,6 @@
 package com.jig.blog.service;
 
-import com.jig.blog.config.auth.PrincipalDetail;
+import com.jig.blog.config.security.PrincipalDetail;
 import com.jig.blog.model.RoleType;
 import com.jig.blog.model.User;
 import com.jig.blog.repository.UserRepository;
@@ -59,6 +59,8 @@ public class UserService {
         if (StringUtils.hasText(persistenceUser.getProvider())) {
             return;
         }
+        // TODO : 회원 정보 빈값 체크 필요
+        // TODO : 유효성 검사 위치 및 어떤 방법으로 할지 고민 필요
 
         String rawPassword = user.getPassword();
         String encPassword = encoder.encode(rawPassword);

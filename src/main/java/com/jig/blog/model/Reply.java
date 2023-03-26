@@ -1,10 +1,13 @@
 package com.jig.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -26,10 +29,17 @@ public class Reply {
     @JoinColumn(name = "boardId")
     private Board board;
 
-    @ManyToOne // Many = Board, One = User,  대 대 일 관계
+    @ManyToOne // Many = Board, One = User,  다 대 일 관계
     @JoinColumn(name = "userId")// 참조관계에서 관계형 데이터베이스는 foreign key를 사용하고 ORM에서는 객체를 사용한다. 이 때, ORM에서는 자식 테이블에서 조인 컬럼명을 지정해준다.
     private User user; // private String userId; 대신 객체와 @JoinColumn(name="userId")를 사용
 
     @CreationTimestamp
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp createDate;
+
+    @LastModifiedDate   // 데이터 수정할 때 시간 자동 수정
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    private Timestamp modifiedDate;
 }
