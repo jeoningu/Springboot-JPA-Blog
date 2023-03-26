@@ -1,0 +1,18 @@
+/** common **/
+body {
+    background-color: #fff;
+    color: #333;
+}
+
+.nodata {
+    padding: 100px 0;
+    text-align: center;
+    background-color: #deeaf5;
+}
+
+#toast > a {
+    color:#d70909;
+    text-decoration: underline;
+    text-underline-position:under;
+    font-weight: 540;
+}

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <br/>
-<div class="jumbotron text-center" style="margin-bottom:0; font-weight: 650">
+<div class="text-center mt-auto" style=" font-weight: 650; background-color : #d8e2eb;">
     <p>TEl : 010-1111-2222</p>
     <p>ADDRESS : 서울 은평구 신사동</p>
     <p>Create by jeoningu&hamnie</p>

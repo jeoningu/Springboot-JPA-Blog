@@ -83,6 +83,7 @@ let index ={
             alert(JSON.stringify(error));
         });
     },
+
     replySave: function () {
         let boardId = $("#id").text()
         let data = {
@@ -99,7 +100,7 @@ let index ={
             dataType: "json"
 
         }).done(function(resp){
-            alert("댓글이 등록 되었습니다.");
+            //alert("댓글이 등록 되었습니다.");
             location.href = `/board/${boardId}`;
 
         }).fail(function(error){
@@ -116,7 +117,7 @@ let index ={
             dataType: "json"
 
         }).done(function(resp){
-            alert("댓글이 삭제 되었습니다.");
+            //alert("댓글이 삭제 되었습니다.");
             location.href ="/board/"+$("#id").text();
 
         }).fail(function(error){
@@ -146,7 +147,7 @@ let index ={
             dataType: "json"
 
         }).done(function(resp){
-            alert("댓글이 수정 되었습니다.");
+            //alert("댓글이 수정 되었습니다.");
             location.href ="/board/"+$("#id").text();
 
         }).fail(function(error){
