@@ -14,6 +14,8 @@ Front-end
 * html
 * css
 * javascript
+  * jQuery (DOM 처리)
+  * ajax (비동기 통신 처리)
 * jsp
 
 ## 기능
