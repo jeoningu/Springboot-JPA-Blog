@@ -7,7 +7,8 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 // ORM : Object와 관계형 데이터베이스의 테이블을 자동으로 매핑해주는 기술
-@Data
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 //@AllArgsConstructor
 //@Builder // 빌더 패턴!!
@@ -22,7 +23,7 @@ public class User {
     @Column(nullable = false, length = 100, unique = true) // nuallable : 필수값, 길이 30
     private String username; // 아이디
 
-    @Column(nullable = false, length = 100) // nuallable : 필수값, 길이 100(hash로 비밀번호 암호화하면 길이가 길어짐
+    @Column(nullable = false, length = 100) // nuallable : 필수값, 길이 100(hash로 비밀번호 암호화하면 길이가 길어짐)
     private String password;
 
     @Column(nullable = false, length = 50) // nuallable : 필수값, 길이 50
