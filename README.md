@@ -30,6 +30,8 @@ Front-end
 * 회원/비밀번호 찾기
 * 회원탈퇴
 * 대댓글
+* 게시글 조회수
+* 회원수정 버그
 
 ## 핵심 이슈 해결 내용
 * JPA 이슈 - N+1, LazyInitializationException
