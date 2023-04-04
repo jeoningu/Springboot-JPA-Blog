@@ -42,3 +42,8 @@ Front-end
 * oauth 가입시 name 입력 오류 확인 필요
 * sse 관련 오류로 인해 알림 기능 수정 필요 : sse가 너무 불안정해서 다른 방법을 사용해야 될 것 같음
 * 유효성 검사 기능 추가 필요
+
+## 화면
+![게시판 프로젝트 화면 모음_0001](https://user-images.githubusercontent.com/103714252/229777272-9f5b9341-51bd-4e87-b177-6b260e4a033b.png)
+![게시판 프로젝트 화면 모음_0003](https://user-images.githubusercontent.com/103714252/229777568-139d3fd0-16ea-4d96-8e6c-e4641db9460b.png)
+![게시판 프로젝트 화면 모음_0002](https://user-images.githubusercontent.com/103714252/229777573-8a0c2fa4-584b-413c-8d06-a5c4833ada91.png)
