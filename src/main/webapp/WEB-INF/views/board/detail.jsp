@@ -31,7 +31,7 @@
     <div class="card">
         <div class="card-header">댓글 리스트</div>
         <ul id="reply-box" class="list-group">
-            <c:forEach var="reply" items="${board.replys}" >
+            <c:forEach var="reply" items="${board.replies}" >
                 <li  class="list-group-item ">
                     <div id="reply-${reply.id}">
                         <div class="d-flex justify-content-between">

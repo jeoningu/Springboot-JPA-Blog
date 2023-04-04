@@ -1,14 +1,26 @@
 package com.jig.blog.service;
 
 import com.jig.blog.config.security.PrincipalDetail;
+import com.jig.blog.dto.UserMeReqDto;
+import com.jig.blog.error.exception.user.PasswordMismatchException;
+import com.jig.blog.error.exception.user.UserNotFoundException;
+import com.jig.blog.model.Board;
 import com.jig.blog.model.RoleType;
 import com.jig.blog.model.User;
+import com.jig.blog.repository.BoardRepository;
+import com.jig.blog.repository.ReplyRepository;
 import com.jig.blog.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -19,18 +31,28 @@ import org.springframework.util.StringUtils;
  * 2) service 의미
  */
 @Service
+@Slf4j
 public class UserService {
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder encoder;
+    private BoardRepository boardRepository;
 
+    @Autowired
+    private ReplyRepository replyRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    /**
+     * 회원 가입
+     */
     @Transactional
     public void joinUser(User user) {
 
         String rawPassword = user.getPassword();
-        String encPassword = encoder.encode(rawPassword);
+        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
 
         // TODO: 수정 필요. 일단 기본값을 USER로 넣음
@@ -39,9 +61,12 @@ public class UserService {
         userRepository.save(user);
     }
 
+    /**
+     * 회원 정보 수정 - 이름, 이메일
+     *  - 클라이언트에서 한 항목씩만 요청한다.
+     */
     @Transactional
-    public void updateUser(User user, PrincipalDetail principalDetail) {
-
+    public User updateUser(UserMeReqDto userMeReqDto) {
         /*
         수정 시에는 영속성 컨텍스트를 이용한다.
          1. DB에서 SELECT해서 User 오브젝트를 영속성 컨텍스트에 영속화시킨다.
@@ -50,27 +75,96 @@ public class UserService {
          4. 영속성컨텍스트가 Dirty Cecking을 해서 변경을 감지하여 DB에 UPDATE문을 요청한다.
          5. 함수가 종료되면서 트랙잭션이 종료되고 DB에 COMMIT한다.
          */
-        User persistenceUser = userRepository.findById(user.getId()).orElseThrow(() -> {
-            return new IllegalArgumentException("회원 수정 실패 - 회원 id를 찾을 수 없습니다. : " + user.getId());
-        });
+        User currentUser = getCurrentUser();
+        String name = userMeReqDto.getName();
+        String email = userMeReqDto.getEmail();
+        if (null != name) {
+            currentUser.setName(name);
 
-        // validation 체크
-        // Oauth 회원인 경우 수정 못 하게 return
-        if (StringUtils.hasText(persistenceUser.getProvider())) {
-            return;
+        } else if (null != email) {
+            currentUser.setEmail(email);
         }
-        // TODO : 회원 정보 빈값 체크 필요
-        // TODO : 유효성 검사 위치 및 어떤 방법으로 할지 고민 필요
 
-        String rawPassword = user.getPassword();
-        String encPassword = encoder.encode(rawPassword);
-        persistenceUser.setPassword(encPassword);
-        persistenceUser.setEmail(user.getEmail());
-
-        // 변경된 회원정보 SESSION에 반영 ( 참고 :  https://azurealstn.tistory.com/92 )
-        principalDetail.setUser(persistenceUser);
+        // security context session에 반영
+        setCurrentUser(currentUser);
+        return currentUser;
+    }
+    /**
+     * 회원 정보 수정 - 회원 비밀번호 수정
+     */
+    @Transactional
+    public void updateUserPassword(UserMeReqDto userMeReqDto) {
+        User currentUser = getCurrentUser();
+        if (bCryptPasswordEncoder.matches(userMeReqDto.getCurrentPassword(), currentUser.getPassword())) {
+            currentUser.setPassword(bCryptPasswordEncoder.encode(userMeReqDto.getNewPassword()));
+        } else {
+            throw new PasswordMismatchException();
+        }
     }
 
+    /**
+     * 회원 탈퇴
+     *  - oAuth 회원이 아닌 경우에만 패스워드 체크
+     */
+    @Transactional
+    public void deleteUser(UserMeReqDto userMeReqDto) {
+        User currentUser = getCurrentUser();
+
+        // oAuth 회원이 아닌 경우에만 패스워드 체크
+        if (null == currentUser.getProvider()) {
+            if (!bCryptPasswordEncoder.matches(userMeReqDto.getCurrentPassword(), currentUser.getPassword())) {
+                throw new PasswordMismatchException();
+            }
+        }
+
+        /*// board 지우면서 알아서 연관관계 데이터 지워지도록.. -> 참조 데이터 삭제 안되는 sql 에러 발생함
+        userRepository.deleteById(currentUser.getId());*/
+
+        /*// user와 board, reply를 함께 조회하여 CascadeType.REMOVE에 의해 삭제합니다. -> N+1 문제 발생
+        Optional<User> optionalUser = userRepository.findUserByIdWithBoards(currentUser.getId());
+        optionalUser.ifPresent(user -> {
+            List<Board> boards = user.getBoards();
+            for (Board board : boards) {
+                Optional<Board> optionalBoard = boardRepository.findBoardByIdWithReplies(board.getId());
+                optionalBoard.ifPresent(b -> replyRepository.deleteAll(b.getReplies()));
+            }
+            boardRepository.deleteAll(boards);
+            userRepository.delete(user);
+        });*/
+
+        // 참조 되는 데이터부터 지운다.
+        // jpql로 작성된 delete 문을 통해 N+1 로 delete 쿼리가 발생하지 않도록 한다.
+        replyRepository.deleteAllByUserId(currentUser.getId());
+        boardRepository.deleteAllByUserId(currentUser.getId());
+        userRepository.delete(currentUser);
+
+        // session에서 지우기
+        SecurityContextHolder.clearContext();
+    }
+
+    /**
+     * 로그인된 유저 조회
+     */
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return null;
+        }
+        String username = authentication.getName();
+        return userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException());
+    }
+
+    /**
+     * 스프링시큐리티 세션에 유저정보 업데이트
+     */
+    private void setCurrentUser(User user) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(new PrincipalDetail(user), null, authentication.getAuthorities()));
+    }
+
+    /**
+     * username으로 db에서 user정보 조회
+     */
     @Transactional(readOnly = true)
     public User getUser(String username) {
         User user = userRepository.findByUsername(username).orElseGet(()->{

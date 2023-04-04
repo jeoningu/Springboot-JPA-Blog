@@ -45,7 +45,7 @@ let index = {
             url : "/auth/joinProc",
             data : JSON.stringify(data),  // http body 데이터
             contentType : "application/json; charset=utf-8", // body 데이터가 어떤 타입인지(MIME)
-            dataType: "json" // 서버로부터의 ajax 응답 데이터를 javascript object 형태로 변환해서 응답해줌 (생략가능)
+            //dataType: "json" // 서버로부터의 ajax 응답 데이터를 javascript object 형태로 변환해서 응답해줌 (생략가능)
 
         }).done(function(resp){
             //console.log(resp);
@@ -72,7 +72,7 @@ let index = {
             url : "/auth/joinProc",
             data : JSON.stringify(data),
             contentType : "application/json; charset=utf-8",
-            dataType: "json",
+            //dataType: "json",
             success : function (){
                 alert("로그인이 완료되었습니다");
             },
@@ -93,7 +93,7 @@ let index = {
     */
     update: function () {
         let data = {
-            id : $("#id").val(),
+            //id : $("#id").val(),
             //username : $("#username").val(), // session update 에 사용됨 ( authentication을 만들어서 session의 SecurityContextHolder의 Context에 넣어주는 방식일 때 사용. 다른 방식으로 userApiController에서 처리)
             password : $("#password").val(),
             name : $("#name").val(),
@@ -105,7 +105,7 @@ let index = {
             url : "/user",
             data : JSON.stringify(data),  // http body 데이터
             contentType : "application/json; charset=utf-8", // body 데이터가 어떤 타입인지(MIME)
-            dataType: "json" // 서버로부터의 ajax 응답 데이터를 javascript object 형태로 변환해서 응답해줌 (생략가능)
+            //dataType: "json" // 서버로부터의 ajax 응답 데이터를 javascript object 형태로 변환해서 응답해줌 (생략가능)
 
         }).done(function(resp){
             alert("회원수정이 완료되었습니다");

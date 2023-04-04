@@ -29,7 +29,7 @@ let index ={
             url : "/api/board",
             data : JSON.stringify(data),
             contentType : "application/json; charset=utf-8",
-            dataType: "json"
+            //dataType: "json"
 
         }).done(function(resp){
             alert("글쓰기가 완료되었습니다");
@@ -48,7 +48,7 @@ let index ={
             type : "DELETE",
             url : "/api/board/"+id,
             contentType : "application/json; charset=utf-8",
-            dataType: "json"
+            //dataType: "json"
 
         }).done(function(resp){
             alert("글 삭제가 완료되었습니다");
@@ -73,7 +73,7 @@ let index ={
             url : "/api/board/"+id,
             data : JSON.stringify(data),
             contentType : "application/json; charset=utf-8",
-            dataType: "json"
+            //dataType: "json"
 
         }).done(function(resp){
             alert("글 수정이 완료되었습니다");
@@ -97,8 +97,7 @@ let index ={
             url : `/api/board/${boardId}/reply`,    // ` 백틱 사용 // boardId를 data에 담지 않고 path방식을 사용하는 이유: id는 path방식으로 주소에 담고 데이터는 body에 담는 방식을 지키기 위함
             data : JSON.stringify(data),
             contentType : "application/json; charset=utf-8",
-            dataType: "json"
-
+            //dataType: "json"
         }).done(function(resp){
             //alert("댓글이 등록 되었습니다.");
             location.href = `/board/${boardId}`;
@@ -114,7 +113,7 @@ let index ={
             type : "DELETE",
             url : `/api/board/${boardId}/reply/${replyId}`,    // ` 백틱 사용 // boardId를 data에 담지 않고 path방식을 사용하는 이유: id는 path방식으로 주소에 담고 데이터는 body에 담는 방식을 지키기 위함
             contentType : "application/json; charset=utf-8",
-            dataType: "json"
+            //dataType: "json"
 
         }).done(function(resp){
             //alert("댓글이 삭제 되었습니다.");
@@ -128,8 +127,6 @@ let index ={
     replyUpdate: function (boardId, replyId) {
         $(`#reply-${replyId}`).css('display', 'none');
         $(`#modifyReply-${replyId}`).css('display', ' block');
-
-
     },
 
     modifyReplySave: function () {
@@ -144,8 +141,7 @@ let index ={
             url : `/api/board/${boardId}/reply/${replyId}`,    // ` 백틱 사용 // boardId를 data에 담지 않고 path방식을 사용하는 이유: id는 path방식으로 주소에 담고 데이터는 body에 담는 방식을 지키기 위함
             contentType : "application/json; charset=utf-8",
             data : JSON.stringify(data),
-            dataType: "json"
-
+            //dataType: "json"
         }).done(function(resp){
             //alert("댓글이 수정 되었습니다.");
             location.href ="/board/"+$("#id").text();

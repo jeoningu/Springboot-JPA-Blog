@@ -94,9 +94,11 @@ function serverSentEvents() {
         // "sse" 이름으로 구독 요청
         sse.addEventListener('sse', (event) => {
 
-            const data = JSON.parse(event.data); //const { data: receivedConnectData } = event;
-            if (data) {
-                toast('toast', `<a href="/board/${data.boardId}" >댓글이 추가된 게시글로 이동합니다.</br>data.boardTitle</a>`, {});
+            if (typeof(event.data) == 'object') {
+                const data = JSON.parse(event.data); //const { data: receivedConnectData } = event;
+                if (data) {
+                    toast('toast', `<a href="/board/${data.boardId}" >댓글이 추가된 게시글로 이동합니다.</br>data.boardTitle</a>`, {});
+                }
             }
         });
     }

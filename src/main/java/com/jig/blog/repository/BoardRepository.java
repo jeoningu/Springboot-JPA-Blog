@@ -1,10 +1,13 @@
 package com.jig.blog.repository;
 
 import com.jig.blog.model.Board;
+import com.jig.blog.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -32,4 +35,12 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     @Query("select s from Board s join fetch s.user where s.id = :id")
     Optional<Board> findWithUserById(int id);
 
+//    // fetch join을 사용하여 board와 reply를 함께 조회하는 메서드
+//    @Query("SELECT b FROM Board b JOIN FETCH b.replies WHERE b.id = :boardId")
+//    Optional<Board> findBoardByIdWithReplies(@Param("boardId") int boardId);
+
+    // todo: @Modifying 관련 추가 공부 필요할 듯
+    @Modifying // 데이터를 벌크로 수정하는 임의 작성 jpql에 붙여주는 어노테이션이고 영속성 관리에 대한 옵션 설정이 필요 할 수 있음
+    @Query("delete from Board b where b.user.id = :userId")
+    int deleteAllByUserId(@Param("userId") int userId);
 }

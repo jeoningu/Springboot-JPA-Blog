@@ -1,16 +1,12 @@
 package com.jig.blog.controller.api;
 
-import com.jig.blog.config.security.PrincipalDetail;
-import com.jig.blog.dto.ResponseDto;
+import com.jig.blog.dto.UserMeReqDto;
 import com.jig.blog.model.User;
 import com.jig.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserApiController {
@@ -22,15 +18,9 @@ public class UserApiController {
 //    private HttpSession httpSession;        // HttpSession 은 필드 주입
 
     @PostMapping("/auth/joinProc")
-    public ResponseDto<Integer> join(@RequestBody User user) {
-/*        System.out.println("UserApiController.save");
-        System.out.println("user.getUsername() = " + user.getUsername());
-        System.out.println("user.getPassword() = " + user.getPassword());
-        System.out.println("user.getEmail() = " + user.getEmail());*/
-
-        // TODO: result에 따른 처리 필요
+    public ResponseEntity<String> join(@RequestBody User user) {
         userService.joinUser(user);
-        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+        return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
 //    @PostMapping("/api/user/login")
@@ -46,18 +36,27 @@ public class UserApiController {
 //        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 //    }
 
-    @PutMapping("/user")
-    public ResponseDto<Integer> userUpdate(@RequestBody User user, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+    @PutMapping("/me")
+    public ResponseEntity<?> userMeUpdate(@RequestBody UserMeReqDto userMeReqDto) {
 
-        userService.updateUser(user, principalDetail);
+        // 이름, 이메일 변경
+        if (null != userMeReqDto.getName() || null != userMeReqDto.getEmail()) {
+            User updateUser = userService.updateUser(userMeReqDto);
+            return ResponseEntity.status(HttpStatus.OK).body(updateUser);
 
-        /*
-         * session에 변경된 user정보 반영 - 아래 방식 대신 @AuthenticationPrincipal PrincipalDetail principalDetail 을 받아서 service단에서 setUser 해주는 방식으로 함
+        // 패스워드 변경
+        } else if (null != userMeReqDto.getCurrentPassword() && null != userMeReqDto.getNewPassword()) {     // 패스워드 변경
+            userService.updateUserPassword(userMeReqDto); // 비밀번호가 일치하지 않는 경우 exception 발생
+        }
 
-        // authentication을 만들어서 session의 SecurityContextHolder의 Context에 넣어주는 방식 ( 실제 스프링 시큐리티 로그인 과정)
-        // Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-        // SecurityContextHolder.getContext().setAuthentication(authentication);
-        */
-        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+        return ResponseEntity.status(HttpStatus.OK).body("");
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<?> userMeDelete(@RequestBody UserMeReqDto userMeReqDto) {
+
+        userService.deleteUser(userMeReqDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body("");
     }
 }

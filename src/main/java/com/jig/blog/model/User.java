@@ -5,10 +5,13 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 // ORM : Object와 관계형 데이터베이스의 테이블을 자동으로 매핑해주는 기술
-@Getter
-@Setter
+//@Getter
+//@Setter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 //@AllArgsConstructor
 //@Builder // 빌더 패턴!!
@@ -40,6 +43,13 @@ public class User {
     private String provider; // 어떤 OAuth2 인증인지 ex)google, naver, kakao, facebook    (일반 회원이면 null)
 
     private String providerId; // OAuth2 인증에서 사용되는 각 유저의 primary key ex)google에서는 sub값
+/*
+회원 탈퇴시 양방향으로 변경해서 삭제 해보려다가 불필요해서 적용 안함
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Board> boards = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Reply> replies = new ArrayList<>();
+*/
 
     @CreationTimestamp // 시간 자동 입력
     private Timestamp createDate;

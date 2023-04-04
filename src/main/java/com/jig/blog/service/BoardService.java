@@ -75,7 +75,7 @@ public class BoardService {
         // @Transactional 설정된 Service 내의 메서드에서, 정보를 미리 LOAD합니다.
         // 영속상태에서 미리 연관관계 정보를 로드해두면, LAZY 관련 에러가 발생되지 않습니다.
         board.getUser().getEmail();
-        board.getReplys().stream().forEach(reply -> reply.getContent());
+        board.getReplies().stream().forEach(reply -> reply.getUser().getName());
         return board;
     }
 

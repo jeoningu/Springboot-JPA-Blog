@@ -22,7 +22,7 @@ public class ReplyControllerTest {
     /**
      * 순환참조 문제 테스트
      *
-     * 1. Board.java에서 replys에 @JsonIgnoreProperties({"board"})를 달아주지 않고
+     * 1. Board.java에서 replies @JsonIgnoreProperties({"board"})를 달아주지 않고
      * reply데이터가 있는 게시글 번호로 호출하면 무한 로딩 발생함.
      *
      * 2. @JsonIgnoreProperties({"board"}) 설정하고 호출하면 문제 x, 데이터 확인해보면 board-reply에 board데이터가 없음

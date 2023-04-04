@@ -52,6 +52,7 @@
 					</li>
 				</ul>
 				<input type="hidden" id="principalUserId" value="${principal.user.id}"/>
+				<input type="hidden" id="principalUserProvider" value="${principal.user.provider}"/>
 			</c:otherwise>
 		</c:choose>
 

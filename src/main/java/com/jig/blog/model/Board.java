@@ -16,8 +16,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@Getter
-@Setter
+//@Getter
+//@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -60,7 +61,7 @@ public class Board {
     //@JsonIgnoreProperties({"board"}) // Reply에서 board를 다시 조회하지 않겠다. // 순환참조에 의한 무한 호출을 막아준다. // 무한참조가 발생을 안하는데...?
     @OrderBy("id desc")
     //@JsonIgnore
-    private List<Reply> replys;
+    private List<Reply> replies;
 
     @CreatedDate
 //    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")

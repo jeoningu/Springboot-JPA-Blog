@@ -3,6 +3,7 @@ package com.jig.blog.repository;
 import com.jig.blog.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -22,8 +23,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "SELECT * FROM user WHERE username =?1 AND password = ?2", nativeQuery = true)
     User login(String username, String password);*/
 
-
     // SELECT * FROM user WHERE username = 1?;
     Optional<User> findByUsername(String username);
+
+    // fetch join을 사용하여 user와 board를 함께 조회하는 메서드
+//    @Query("SELECT u FROM User u JOIN FETCH u.boards WHERE u.id = :userId")
+//    Optional<User> findUserByIdWithBoards(@Param("userId") int userId);
 
 }
