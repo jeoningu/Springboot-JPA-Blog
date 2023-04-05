@@ -8,7 +8,7 @@ Back-end
 * Spring Boot
 * Spring Data JPA
 * Spring Security
-* MariaDB
+* MySQL
 
 Front-end
 * html
