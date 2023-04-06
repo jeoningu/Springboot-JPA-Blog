@@ -35,7 +35,6 @@ public class BoardService {
 
     @Transactional
     public void saveBoard(Board board, User user) {
-        board.setCount(0);
         board.setUser(user);
 
         boardRepository.save(board);
@@ -66,8 +65,8 @@ public class BoardService {
     /**
      * 글 상세 조회
      */
-    @Transactional(readOnly = true)
-    public Board getBoard(Long id) {
+    @Transactional
+    public Board getBoard(Long id, boolean isDetail) {
         Board board = boardRepository.findWithUserById(id).orElseThrow(() -> {
             return new IllegalArgumentException("글 상세 보기 실패 - 찾을 수 없는 board id 입니다. : " + id);
         });
@@ -76,6 +75,11 @@ public class BoardService {
         // 영속상태에서 미리 연관관계 정보를 로드해두면, LAZY 관련 에러가 발생되지 않습니다.
         board.getUser().getEmail();
         board.getReplies().stream().forEach(reply -> reply.getUser().getName());
+
+        // 상세 페이지 조회인 경우에만 조회수 증가
+        if (isDetail) {
+            board.setViewCount(board.getViewCount()+1);
+        }
         return board;
     }
 

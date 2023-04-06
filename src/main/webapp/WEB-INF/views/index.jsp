@@ -38,7 +38,7 @@
                         <td><a href="/board/${board.id}" >${board.title}</a></td>
                         <td>${board.user.name}</td>
                         <td>${board.createdDate}</td>
-                        <td>${board.count}</td>
+                        <td>${board.viewCount}</td>
                         </tr>
                     </c:forEach>
                 </c:otherwise>

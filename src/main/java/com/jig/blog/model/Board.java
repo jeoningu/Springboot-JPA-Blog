@@ -24,8 +24,8 @@ public class Board extends BaseTimeEntity {
     @Lob // 대용량 데이터
     private String content; // 섬머노트라는 라이브러리를 사용하면 일반적으로 적은 글이 <html>태그가 섞여서 디자인 됨. 따라서 데이터 용량이 커지기 때문에 대용량 데이터가 필요
 
-    // 직접 넣어주자. @ColumnDefault("0")  // int니까 ''으로 감싸줄 필요 없음
-    private int count; // 조회수
+    @Column(nullable = false, columnDefinition = "int default 0")
+    private int viewCount; // 조회수
 
     @ManyToOne(fetch = FetchType.LAZY) // Many = Board, One = User,  다 대 일 관계
     @JoinColumn(name = "userId")// 관계형 데이터베이스는 객체를 저장하는게 아니라 foreign key를 사용하지만 ORM에서는 객체를 저장할 수 있다. 이 때, 조인 컬럼을 지정해준다.
