@@ -11,23 +11,25 @@
         <a href="/board/${board.id}/updateForm/" class="btn btn-light">수정</a>
         <button id="btn-delete" class="btn btn-light">삭제</button>
     </c:if>
-    <br/>
-    <br/>
-    <div>
-        글 번호 : <span id="id">${board.id}</span>
-        작성자 : <span>${board.user.name}</span>
-    </div>
-    <br/>
+    <hr/>
     <div class="form-group">
         <h3>${board.title}</h3>
+    </div>
+    <div>
+        <p class="p_label" id="id" style="margin:0">글번호 : ${board.id}</p>
+    </div>
+    <div>
+        <p class="p_label" style="margin:0">작성자 : ${board.user.name}</p>
+    </div>
+    <div>
+        <p class="p_value" style="margin:0" >${board.createdDate} &nbsp;&nbsp; 조회수 : ${board.viewCount}</p>
     </div>
     <hr/>
     <div class="form-group">
         <div>${board.content}</div>
     </div>
+    <br>
     <hr/>
-
-    <br/>
     <div class="card">
         <div class="card-header">댓글 리스트</div>
         <ul id="reply-box" class="list-group">
