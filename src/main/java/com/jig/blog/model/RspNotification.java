@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class RspNotification {
 
-    int boardId; // 게시글 id
-    int boardUserId; // 게시글 작성자 id
+    Long boardId; // 게시글 id
+    Long boardUserId; // 게시글 작성자 id
     String boardTitle; // 게시글 제목
 }

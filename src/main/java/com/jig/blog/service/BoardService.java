@@ -67,7 +67,7 @@ public class BoardService {
      * 글 상세 조회
      */
     @Transactional(readOnly = true)
-    public Board getBoard(int id) {
+    public Board getBoard(Long id) {
         Board board = boardRepository.findWithUserById(id).orElseThrow(() -> {
             return new IllegalArgumentException("글 상세 보기 실패 - 찾을 수 없는 board id 입니다. : " + id);
         });
@@ -80,12 +80,12 @@ public class BoardService {
     }
 
     @Transactional
-    public void deleteBoard(int id) {
+    public void deleteBoard(Long id) {
         boardRepository.deleteById(id);
     }
 
     @Transactional
-    public void updateBoard(int id, Board board) {
+    public void updateBoard(Long id, Board board) {
 
         Board findBoard = boardRepository.findById(id).orElseThrow(() -> {
             return new IllegalArgumentException("글 수정 실패 - 찾을 수 없는 board id 입니다. : " + id);
@@ -96,7 +96,7 @@ public class BoardService {
     }
 
     @Transactional
-    public void saveReply(int boardId, Reply reply, User replyUser) {
+    public void saveReply(Long boardId, Reply reply, User replyUser) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> {
             return new IllegalArgumentException("댓글 추가 실패 - 찾을 수 없는 board id 입니다. : " + boardId);
         });
@@ -117,12 +117,12 @@ public class BoardService {
     }
 
     @Transactional
-    public void removeReply(int  replyId) {
+    public void removeReply(Long  replyId) {
         replyRepository.deleteById(replyId);
     }
 
     @Transactional
-    public void modifyReply(int replyId, Reply reply) {
+    public void modifyReply(Long replyId, Reply reply) {
         Reply persistenceReply = replyRepository.findById(replyId).orElseThrow(() -> {
             return new IllegalArgumentException("댓글 수정 실패 - 찾을 수 없는 reply id 입니다. : " + replyId);
         });

@@ -24,35 +24,35 @@ public class BoardApiController {
     }
 
     @DeleteMapping("/api/board/{id}")
-    public ResponseEntity<String> deleteBoard(@PathVariable int id) {
+    public ResponseEntity<String> deleteBoard(@PathVariable Long id) {
         boardService.deleteBoard(id);
 
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
     @PutMapping("/api/board/{id}")
-    public ResponseEntity<String> updateBoard(@PathVariable int id, @RequestBody Board board) {
+    public ResponseEntity<String> updateBoard(@PathVariable Long id, @RequestBody Board board) {
 
         boardService.updateBoard(id, board);
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
     @PostMapping("/api/board/{boardId}/reply")
-    public ResponseEntity<String> saveReply(@PathVariable int boardId, @RequestBody Reply reply, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+    public ResponseEntity<String> saveReply(@PathVariable Long boardId, @RequestBody Reply reply, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         boardService.saveReply(boardId, reply, principalDetail.getUser());
 
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
     @DeleteMapping("/api/board/{boardId}/reply/{replyId}")   // boardId는 사용 x, 주소 모양을 규칙적으로 만들기 위함.
-    public ResponseEntity<String> removeReply( @PathVariable int replyId) {
+    public ResponseEntity<String> removeReply( @PathVariable Long replyId) {
         boardService.removeReply(replyId);
 
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
     @PutMapping("/api/board/{boardId}/reply/{replyId}")   // boardId는 사용 x, 주소 모양을 규칙적으로 만들기 위함.
-    public ResponseEntity<String> modifyReply( @PathVariable int replyId, @RequestBody Reply reply) {
+    public ResponseEntity<String> modifyReply( @PathVariable Long replyId, @RequestBody Reply reply) {
         System.out.println("BoardApiController.modifyReply");
         boardService.modifyReply(replyId, reply);
 

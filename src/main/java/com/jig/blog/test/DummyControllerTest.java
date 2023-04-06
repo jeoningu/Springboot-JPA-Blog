@@ -41,7 +41,7 @@ public class DummyControllerTest {
         System.out.println("password : " + user.getPassword());
         System.out.println("email : " + user.getEmail());
         System.out.println("role : " + user.getRole());
-        System.out.println("createDate : " + user.getCreateDate());
+        System.out.println("createDate : " + user.getCreatedDate());
 
         user.setRole(RoleType.USER);
         userRepository.save(user);
@@ -63,7 +63,7 @@ public class DummyControllerTest {
      *   1) 트랜잭션이 종료되기전 flush()가 일어나는 시점에 update query를 생성하여 쓰기지연 SQL저장소에 보낸다.
      *   2) 트랜잭션이 commit() 되는 시점에 DB로 update query를 전송한다.
      */
-    public User updateUser(@PathVariable int id, @RequestBody User requestUser) {
+    public User updateUser(@PathVariable Long id, @RequestBody User requestUser) {
         User findUser = userRepository.findById(id).orElseThrow(() -> {
             return new IllegalArgumentException("수정할 데이터를 찾을 수 없습니다.");
         });
@@ -95,7 +95,7 @@ public class DummyControllerTest {
      * @return
      */
     @DeleteMapping("/dummy/user/{id}")
-    public String deleteUser(@PathVariable int id) {
+    public String deleteUser(@PathVariable Long id) {
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
@@ -111,7 +111,7 @@ public class DummyControllerTest {
      * @return
      */
     @GetMapping("/dummy/user/{id}")
-    public User detail(@PathVariable int id) {
+    public User detail(@PathVariable Long id) {
 
         /* User user = userRepository.findById(id).orElseThrow(new Supplier<IllegalStateException>() {
             @Override

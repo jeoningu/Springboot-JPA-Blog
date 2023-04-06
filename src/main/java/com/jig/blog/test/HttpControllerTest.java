@@ -15,7 +15,7 @@ public class HttpControllerTest {
 
         Member member = Member.builder().username("jig").password("1234").email("jigEmail").build();
         System.out.println(TAG + "getter : " + member.getId());
-        member.setId(5000);
+        member.setId(5000L);
         System.out.println(TAG + "getter : " + member.getId());
 
         return "lombok test 완료";

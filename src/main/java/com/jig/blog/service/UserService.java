@@ -50,6 +50,7 @@ public class UserService {
      */
     @Transactional
     public void joinUser(User user) {
+        // TODO: 회원 가입 유효성 검사 필요
 
         String rawPassword = user.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);

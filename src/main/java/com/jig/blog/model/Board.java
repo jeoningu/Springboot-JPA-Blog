@@ -1,19 +1,8 @@
 package com.jig.blog.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //@Getter
@@ -23,11 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Board {
+public class Board extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 넘버링 전략을 연결된 db에 따르겠따. mysql은 auto-increament
-    private int id;
+    private Long id;
 
     @Column(nullable = false, length = 100)
     private String title;
@@ -63,26 +52,26 @@ public class Board {
     //@JsonIgnore
     private List<Reply> replies;
 
-    @CreatedDate
-//    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
-//    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone="Asia/Seoul")
-    private String createdDate;
-
-    @LastModifiedDate   // 데이터 수정할 때 시간 자동 수정
-//    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-//    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private String modifiedDate;
-
-    @PrePersist
-    public void onPrePersist(){
-        this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
-        this.modifiedDate = this.createdDate;
-    }
-
-    @PreUpdate
-    public void onPreUpdate(){
-        this.modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
-    }
+//    @CreatedDate
+////    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm")
+////    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone="Asia/Seoul")
+//    private String createdDate;
+//
+//    @LastModifiedDate   // 데이터 수정할 때 시간 자동 수정
+////    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+////    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+//    private String modifiedDate;
+//
+//    @PrePersist
+//    public void onPrePersist(){
+//        this.createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+//        this.modifiedDate = this.createdDate;
+//    }
+//
+//    @PreUpdate
+//    public void onPreUpdate(){
+//        this.modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+//    }
 }
 
 /*

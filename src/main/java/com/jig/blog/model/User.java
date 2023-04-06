@@ -17,11 +17,11 @@ import java.util.List;
 //@Builder // 빌더 패턴!!
 @Entity // User 클래스에 대해서 MySQL에 테이블을 생성한다.
 //@DynamicInsert // User 클래스 insert SQL 에서 값이 null인 필드는 빼준다.
-public class User {
+public class User extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 프로젝트에 연결된 DB의 넘저링 전략을 따라간다.// 오라클 - 시퀀스, MySQL - auto_increment
-    private int id;
+    private Long id;
 
     @Column(nullable = false, length = 100, unique = true) // nuallable : 필수값, 길이 30
     private String username; // 아이디
@@ -51,8 +51,8 @@ public class User {
 //    private List<Reply> replies = new ArrayList<>();
 */
 
-    @CreationTimestamp // 시간 자동 입력
-    private Timestamp createDate;
+//    @CreationTimestamp // 시간 자동 입력
+//    private Timestamp createDate;
 
     @Builder
     public User(String username, String password, String name, String email, RoleType role, String provider, String providerId) {

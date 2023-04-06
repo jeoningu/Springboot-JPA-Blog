@@ -30,7 +30,7 @@ public class ReplyControllerTest {
      * @return
      */
     @GetMapping("/test/board/{id}")
-    public Board testBoard(@PathVariable int id) {
+    public Board testBoard(@PathVariable Long id) {
         return boardRepository.findById(id).get(); // jackson 라이브러리가 오브젝트를 josn으로 리턴하면서 모델의 getter를 호출한다.
     }
 
@@ -40,7 +40,7 @@ public class ReplyControllerTest {
      * @return
      */
     @GetMapping("/test/reply/{id}")
-    public List<Reply> testReply(@PathVariable int id) {
+    public List<Reply> testReply(@PathVariable Long id) {
         return replyRepository.findAll();
     }
 }

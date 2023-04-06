@@ -59,7 +59,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         logger.info("userRequest.getAccessToken().getTokenValue() = {}", userRequest.getAccessToken().getTokenValue());
         logger.info("super.loadUser(userRequest).getAttributes() = {}", super.loadUser(userRequest).getAttributes());
 
-
         // OAuth2 종류에 따른 데이터 맵핑
         Map<String, Object> oAuth2UserAttributes = super.loadUser(userRequest).getAttributes();
         String provider = userRequest.getClientRegistration().getRegistrationId();

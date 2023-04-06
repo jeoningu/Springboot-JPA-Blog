@@ -14,7 +14,7 @@ import java.util.Optional;
   */
 
 // @Repository // JpaRepository를 상속하면 bean 생성을 해주는 어노테이션이 없어도 자동으로 bean 등록이 된다.
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
     // 방법 1. JPA Naming 쿼리 전략 : 메서드 이름을 보고 쿼리를 만드는 것
     //User findByUsernameAndPassword(String username, String password); // SELECT * FROM user WHERE username =?1 AND password = ?2;
 
@@ -28,6 +28,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     // fetch join을 사용하여 user와 board를 함께 조회하는 메서드
 //    @Query("SELECT u FROM User u JOIN FETCH u.boards WHERE u.id = :userId")
-//    Optional<User> findUserByIdWithBoards(@Param("userId") int userId);
+//    Optional<User> findUserByIdWithBoards(@Param("userId") Long userId);
 
 }

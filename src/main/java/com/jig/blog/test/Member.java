@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor // 기본 생성자
 public class Member {
 
-    private int id;
+    private Long id;
     private String username;
     private String password;
     private String email;
 
     @Builder // 빌더 패턴으로 파리미터를 부분적으로 받을 수 있음
-    public Member(int id, String username, String password, String email) {
+    public Member(Long id, String username, String password, String email) {
         this.id = id;
         this.username = username;
         this.password = password;

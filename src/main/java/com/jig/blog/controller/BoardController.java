@@ -36,13 +36,14 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}")
-    public String getBoard(@PathVariable int id, Model model) {
+    public String getBoard(@PathVariable Long id, Model model) {
         model.addAttribute("board", boardService.getBoard(id));
+
         return "board/detail";
     }
 
     @GetMapping("/board/{id}/updateForm")
-    public String updateForm(@PathVariable int id, Model model) {
+    public String updateForm(@PathVariable Long id, Model model) {
         model.addAttribute("board", boardService.getBoard(id));
         return "board/updateForm";
     }
