@@ -16,7 +16,7 @@
         <h3>${board.title}</h3>
     </div>
     <div>
-        <p class="p_label" id="id" style="margin:0">글번호 : ${board.id}</p>
+        <p class="p_label" <%--id="id"--%> style="margin:0">글번호 : <span id="id">${board.id}</span></p>
     </div>
     <div>
         <p class="p_label" style="margin:0">작성자 : ${board.user.name}</p>
