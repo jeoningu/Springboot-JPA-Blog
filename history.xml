@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<data>
+    <version></version>
+    <date>2023-03-26</date>
+    <author> jeoningu </author>
+    <description><![CDATA[
+    - rest api
+    - erd
+    - 핵심내용, 어려웠더내용
+        - swagger
+        - 회원 찾기/비밀번호
+        - jwt, redis 추가
+        - jpa n+1
+        - exception, transaction, aop
+	]]></description>
+</data>
+</root>
