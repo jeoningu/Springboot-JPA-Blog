@@ -56,7 +56,10 @@ Front-end
 * 2023.4.4 - Excpeption 처리 기능 및 controller단 반환 형식 수정
 * 2023.4.6 - Entityd의 id 타입을 Long으로 변경
 * 2023.4.6 - createdDate, modifiedDate을 BaseEntity.java,DateTimeAttributeConverter.java 사용해서 자동 저장 되게 수정
-* 2023.5.4 - maven 프로젝트에서 gradle로 변환 ( querydsl 사용시 qClass 추가하면 qClass에 cannot find symbol 에러가 생겨서 해결하기 위함 )
+* 2023.5.4 - maven 프로젝트에서 gradle로 변환
+  * ~~querydsl 사용시 qClass 추가하면 qClass에 cannot find symbol 에러가 생겨서 해결하기 위함~~ 아니고..
+  * QClass에 "cannot find symbol" 에러는 'intellij 설정에서 빌더의 java 버전'과 'build.gradle 파일의 java 버전' 불일치가 원인
+  * 그렇다 해도 gradle에서 build.gradle에 설정이 간편하긴 하니까 gradle 계속해서 사용하는 걸로 결정
 
 ## 화면
 ![게시판 프로젝트 화면 모음_0001](https://user-images.githubusercontent.com/103714252/229777272-9f5b9341-51bd-4e87-b177-6b260e4a033b.png)
