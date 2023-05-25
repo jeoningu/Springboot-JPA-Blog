@@ -2,10 +2,9 @@ package com.jig.blog.service;
 
 //import com.jig.blog.config.ServerSentEvents.backup.SseEmitters;
 import com.jig.blog.config.ServerSentEvents.NotificationService;
-import com.jig.blog.model.Board;
-import com.jig.blog.model.Reply;
-import com.jig.blog.model.RspNotification;
-import com.jig.blog.model.User;
+import com.jig.blog.dto.BoardReqDto;
+import com.jig.blog.dto.ReplyReqDto;
+import com.jig.blog.model.*;
 import com.jig.blog.repository.BoardRepository;
 import com.jig.blog.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-
 /**
  * service가 필요한 이유
  *
  * 1) 트랜잭션을 관리하기 위함
  * 2) service 의미
  */
+@Slf4j
 @Service
 public class BoardService {
     @Autowired
@@ -34,10 +33,14 @@ public class BoardService {
    private NotificationService notificationService;
 
     @Transactional
-    public void saveBoard(Board board, User user) {
+    public void saveBoard(BoardReqDto boardReqDto, User user) {
+        Board board = Board.builder()
+                .title(boardReqDto.getTitle())
+                .content(boardReqDto.getContent())
+                .build();
         board.setUser(user);
 
-        boardRepository.save(board);
+        boardRepository.saveAndFlush(board);
     }
 
     /**
@@ -84,40 +87,43 @@ public class BoardService {
     }
 
     @Transactional
-    public void deleteBoard(Long id) {
+    public void removeBoard(Long id) {
         boardRepository.deleteById(id);
     }
 
     @Transactional
-    public void updateBoard(Long id, Board board) {
+    public void modifyBoard(Long id, BoardReqDto boardReqDto) {
 
         Board findBoard = boardRepository.findById(id).orElseThrow(() -> {
             return new IllegalArgumentException("글 수정 실패 - 찾을 수 없는 board id 입니다. : " + id);
         });
 
-        findBoard.setTitle(board.getTitle());
-        findBoard.setContent(board.getContent());
+        findBoard.setTitle(boardReqDto.getTitle());
+        findBoard.setContent(boardReqDto.getContent());
     }
 
     @Transactional
-    public void saveReply(Long boardId, Reply reply, User replyUser) {
+    public void saveReply(Long boardId, ReplyReqDto replyReqDto, User replyUser) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> {
             return new IllegalArgumentException("댓글 추가 실패 - 찾을 수 없는 board id 입니다. : " + boardId);
         });
 
-        reply.setUser(replyUser);
-        reply.setBoard(findBoard);
+        Reply reply = Reply.builder()
+                .content(replyReqDto.getContent())
+                .user(replyUser)
+                .board(findBoard)
+                .build();
 
         replyRepository.save(reply);
 
-        // sse를 통해 댓글이 추가된 게시글 저자에게 알림 메세지
-        // - 게시글 저자가 로그인 되어 있는 경우 게시글 저자의 화면에 알림 메세지가 발생 한다.
-        RspNotification rspNotification = RspNotification.builder()
-                .boardUserId(findBoard.getUser().getId())
-                .boardId(findBoard.getId())
-                .boardTitle(findBoard.getTitle())
-                .build();
-        notificationService.send(rspNotification);
+//        // sse를 통해 댓글이 추가된 게시글 저자에게 알림 메세지
+//        // - 게시글 저자가 로그인 되어 있는 경우 게시글 저자의 화면에 알림 메세지가 발생 한다.
+//        RspNotification rspNotification = RspNotification.builder()
+//                .boardUserId(findBoard.getUser().getId())
+//                .boardId(findBoard.getId())
+//                .boardTitle(findBoard.getTitle())
+//                .build();
+//        notificationService.send(rspNotification);
     }
 
     @Transactional
@@ -126,12 +132,11 @@ public class BoardService {
     }
 
     @Transactional
-    public void modifyReply(Long replyId, Reply reply) {
+    public void modifyReply(Long replyId, ReplyReqDto replyReqDto) {
         Reply persistenceReply = replyRepository.findById(replyId).orElseThrow(() -> {
             return new IllegalArgumentException("댓글 수정 실패 - 찾을 수 없는 reply id 입니다. : " + replyId);
         });
 
-        persistenceReply.setContent(reply.getContent());
-
+        persistenceReply.setContent(replyReqDto.getContent());
     }
 }

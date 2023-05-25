@@ -16,6 +16,7 @@ public class Board extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 넘버링 전략을 연결된 db에 따르겠따. mysql은 auto-increament
+    @Column(name = "board_id")
     private Long id;
 
     @Column(nullable = false, length = 100)
@@ -28,7 +29,7 @@ public class Board extends BaseTimeEntity {
     private int viewCount; // 조회수
 
     @ManyToOne(fetch = FetchType.LAZY) // Many = Board, One = User,  다 대 일 관계
-    @JoinColumn(name = "userId")// 관계형 데이터베이스는 객체를 저장하는게 아니라 foreign key를 사용하지만 ORM에서는 객체를 저장할 수 있다. 이 때, 조인 컬럼을 지정해준다.
+    @JoinColumn(name = "user_id")// 관계형 데이터베이스는 객체를 저장하는게 아니라 foreign key를 사용하지만 ORM에서는 객체를 저장할 수 있다. 이 때, 조인 컬럼을 지정해준다.
     private User user; // private String userId; 대신 객체와 @JoinColumn(name="userId")를 사용
 
     /**

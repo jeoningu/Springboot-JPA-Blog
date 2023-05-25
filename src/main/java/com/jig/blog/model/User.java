@@ -21,6 +21,7 @@ public class User extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 프로젝트에 연결된 DB의 넘저링 전략을 따라간다.// 오라클 - 시퀀스, MySQL - auto_increment
+    @Column(name = "user_id")
     private Long id;
 
     @Column(nullable = false, length = 100, unique = true) // nuallable : 필수값, 길이 30
@@ -55,7 +56,8 @@ public class User extends BaseTimeEntity{
 //    private Timestamp createDate;
 
     @Builder
-    public User(String username, String password, String name, String email, RoleType role, String provider, String providerId) {
+    public User(Long id, String username, String password, String name, String email, RoleType role, String provider, String providerId) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.name = name;
