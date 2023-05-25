@@ -1,8 +1,8 @@
 package com.jig.blog.controller.api;
 
 import com.jig.blog.config.security.PrincipalDetail;
-import com.jig.blog.model.Board;
-import com.jig.blog.model.Reply;
+import com.jig.blog.dto.BoardReqDto;
+import com.jig.blog.dto.ReplyReqDto;
 import com.jig.blog.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
