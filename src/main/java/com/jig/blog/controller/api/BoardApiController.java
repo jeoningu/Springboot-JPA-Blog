@@ -59,4 +59,11 @@ public class BoardApiController {
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
+    @PostMapping("/api/board/{boardId}/like")
+    public ResponseEntity<String> like( @PathVariable Long boardId, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        boardService.likeUseRedisson(boardId, principalDetail.getUser());
+
+        return ResponseEntity.status(HttpStatus.OK).body("");
+    }
+
 }

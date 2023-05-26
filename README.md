@@ -1,16 +1,18 @@
-# 게시판 개인 프로젝트
+# 커뮤니티 
+
+## 프로젝트 목표
 * 백엔드 기술 중심으로 기능을 만들어보기 위한 프로젝트입니다.
 * 화면에서도 기능을 동작시킬 수 있게 기본적인 형태로 구현하였습니다.
-
 
 ## 기술 스택
 ```
 Back-end
-* JAVA
-* Spring Boot
+* Java 1.8
+* Spring Boot 2.7.4
 * Spring Data JPA
 * Spring Security
-* MySQL
+* MySQL 8.0
+* Redis 분산 락
 
 Front-end
 * html
@@ -21,7 +23,15 @@ Front-end
 * jsp
 ```
 
-## 기능
+## 이슈 기술적 해결 내용 정리
+* JPA 이슈 - N+1, LazyInitializationException
+  * https://1subi.tistory.com/entry/%EA%B2%8C%EC%8B%9C%ED%8C%90-%EA%B0%9C%EC%9D%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-JPA-%EC%9D%B4%EC%8A%88-%ED%95%B4%EA%B2%B0-LazyInitializationException-N1
+  * https://github.com/jeoningu/Springboot-JPA-Blog/commit/b3cdeef432648be68dd08be3e732c896f0ec62a6
+
+* 게시글 좋아요 기능 - redis 분산 락을 이용하여 동시성 제어하기
+
+
+## 기능 목록
 [구현 완료]
 * 세션 로그인, 네이버/카카오/구글 OAuth2.0 로그인, 로그아웃
 * 회원 - 가입/수정/탈퇴
@@ -31,7 +41,7 @@ Front-end
 * 게시글 조회수 (중복 방지 기능 추가 필요)
 
 
-[추가할 기능]
+[추가 예정]
 * 회원/비밀번호 찾기
 * 대댓글
 * 게시판 목록에서 게시글 검색
@@ -39,17 +49,13 @@ Front-end
 * 게시글 상세보기에 버튼 추가 - 이전글/다음글/목록
 
 
-## 핵심 이슈 해결 내용
-* JPA 이슈 - N+1, LazyInitializationException
-  * https://1subi.tistory.com/entry/%EA%B2%8C%EC%8B%9C%ED%8C%90-%EA%B0%9C%EC%9D%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-JPA-%EC%9D%B4%EC%8A%88-%ED%95%B4%EA%B2%B0-LazyInitializationException-N1
-  * https://github.com/jeoningu/Springboot-JPA-Blog/commit/b3cdeef432648be68dd08be3e732c896f0ec62a6
-
-
 ## 이슈 목록
 * oauth 가입시 name 입력 오류 확인 필요
 * sse 관련 오류로 인해 알림 기능 수정 필요 : sse가 너무 불안정해서 다른 방법을 사용해야 될 것 같음
 * 유효성 검사 기능 추가 필요
 * 조회수 중복 방지 기능 추가 필요
+* IllegalArgumentException exception handler 처리, 로그인이 안 돼서 처리 불가 에 대한 exception 처리
+* 로그인에 사용 되는 username 대신 email로 로그인 할 수 있게 변경, 세션 방식 로그인에서 jwt 토큰 방식으로 변경
 
 
 ## 완료 이슈 목록

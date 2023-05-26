@@ -1,14 +1,16 @@
 package com.jig.blog.repository;
 
 import com.jig.blog.model.Board;
-import com.jig.blog.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.LockModeType;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -17,7 +19,7 @@ import java.util.Optional;
  */
 
 // @Repository // JpaRepository를 상속하면 bean 생성을 해주는 어노테이션이 없어도 자동으로 bean 등록이 된다.
-public interface BoardRepository extends JpaRepository<Board, Long> {
+public interface BoardRepository extends JpaRepository<Board, Long>, BoardCustomRepository {
 
     // #1. N+1 문제 해결을 위해 EntityGraph 또는 fetch join 사용
 /*
@@ -33,7 +35,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findAllWithUserBy(Pageable pageable);
 
     @Query("select s from Board s join fetch s.user where s.id = :id")
-    Optional<Board> findWithUserById(Long id);
+    Optional<Board> findWithUserById(@Param("id") Long id);
+
+    @Query("select s from Board s join fetch s.Likes where s.id = :id")
+    Optional<Board> findWithLikesById(@Param("id") Long id);
 
 //    // fetch join을 사용하여 board와 reply를 함께 조회하는 메서드
 //    @Query("SELECT b FROM Board b JOIN FETCH b.replies WHERE b.id = :boardId")
@@ -43,4 +48,12 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Modifying // 데이터를 벌크로 수정하는 임의 작성 jpql에 붙여주는 어노테이션이고 영속성 관리에 대한 옵션 설정이 필요 할 수 있음
     @Query("delete from Board b where b.user.id = :userId")
     int deleteAllByUserId(@Param("userId") Long userId);
+
+
+    List<Board> findAllByOrderByCreatedDateDesc();
+
+    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
+    @Query("select s from Board s where s.id = :boardId")
+    Optional<Board>  findByWithOptimisticLock(@Param("boardId") final Long id);
+
 }

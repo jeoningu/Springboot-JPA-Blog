@@ -3,6 +3,7 @@ package com.jig.blog.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 //@Getter
@@ -31,6 +32,12 @@ public class Board extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY) // Many = Board, One = User,  다 대 일 관계
     @JoinColumn(name = "user_id")// 관계형 데이터베이스는 객체를 저장하는게 아니라 foreign key를 사용하지만 ORM에서는 객체를 저장할 수 있다. 이 때, 조인 컬럼을 지정해준다.
     private User user; // private String userId; 대신 객체와 @JoinColumn(name="userId")를 사용
+
+    @Column(nullable = false, columnDefinition = "int default 0")
+    private int likeCount;
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)  // board가 삭제되면 reply도 삭제된다.
+    private List<Like> Likes;
 
     /**
      * @ManyToOne 어노테이션을 쓰면 JPA는 한 테이블만 조홰해도 가지고 있는 객체에 대해서 join한 결과를 같이 가져온다. ( sql 사에서 select * from Board만 해도 replyList를 join을 한다는 의미 )

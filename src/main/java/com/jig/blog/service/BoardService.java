@@ -6,7 +6,12 @@ import com.jig.blog.dto.BoardReqDto;
 import com.jig.blog.dto.ReplyReqDto;
 import com.jig.blog.model.*;
 import com.jig.blog.repository.BoardRepository;
+import com.jig.blog.repository.LikeRepository;
 import com.jig.blog.repository.ReplyRepository;
+
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * service가 필요한 이유
@@ -28,9 +35,12 @@ public class BoardService {
     private BoardRepository boardRepository;
     @Autowired
     private ReplyRepository replyRepository;
-
-   @Autowired
-   private NotificationService notificationService;
+    @Autowired
+    private LikeRepository likeRepository;
+//    @Autowired
+//    private NotificationService notificationService;
+    @Autowired
+    private RedissonClient redissonClient;
 
     @Transactional
     public void saveBoard(BoardReqDto boardReqDto, User user) {
@@ -138,5 +148,66 @@ public class BoardService {
         });
 
         persistenceReply.setContent(replyReqDto.getContent());
+    }
+
+    /*
+     좋아요 기능에 대해서 redisson을 이용하여 분산 락(Distributed lock) 처리
+      - 여러 프로세스,쓰레드에서 공유자원에 접근할 때 동시 접근을 제어해서 자원의 정합성이 깨지지 않도록 하는 것
+      - redisson 처리 메서드에는 @Transactional을 설정하면 lock 획득,해제가 정상동작하지 않기 때문에 @Transactional을 설정하면 안됨
+      - 작업 메서드 doLike 에는 @Transactional 처리
+     */
+    public void likeUseRedisson(Long boardId, User user) {
+        //key 로 Lock 객체 가져옴
+        final String lockName = "boardId-" + boardId +" like";
+        final RLock lock = redissonClient.getLock(lockName);
+        try {
+            //획득시도 시간, 락 점유 시간
+            boolean available = lock.tryLock(100, 3, TimeUnit.SECONDS);
+            if (!available) {
+                log.warn("lock 획득 실패");
+                return;
+            }
+
+            doLike(boardId, user);
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Transactional
+    public void doLike(Long boardId, User user) {
+        // 게시글 검색
+//        Board findBoard = boardRepository.findByWithOptimisticLock(boardId).orElseThrow(() -> {
+        Board findBoard = boardRepository.findWithUserById(boardId).orElseThrow(() -> {
+            return new IllegalArgumentException("좋아요 실패 - 찾을 수 없는 board id 입니다. : " + boardId);
+        });
+
+//        // 이미 좋아요 되어있다면 에러 반환
+        Optional<Like> likeByUserAndBoard = likeRepository.findByUserAndBoard(user, findBoard);
+        if (likeByUserAndBoard.isPresent()){
+//            throw new DuplicateResourceException("already exist data by member id :" + user.getId() + " ,"
+//                    + "board id : " + findBoard.getId());
+            likeRepository.delete(likeByUserAndBoard.get());
+            boardRepository.subtractLikeCount(findBoard);
+        } else {
+
+            // 좋아요 정보 저장
+            Like like = Like.builder()
+                    .user(user)
+                    .board(findBoard)
+                    .build();
+            likeRepository.save(like);
+
+            // 게시글에 좋아요 카운트 추가
+            /*
+            // 조회수만 1증가 시키는 간단한 예제이기 때문에 단순 쿼리로 해결할 수 있음
+            findBoard.setLikeCount(findBoard.getLikeCount()+1);
+            boardRepository.saveAndFlush(findBoard);
+            */
+            boardRepository.addLikeCount(findBoard);
+        }
     }
 }
