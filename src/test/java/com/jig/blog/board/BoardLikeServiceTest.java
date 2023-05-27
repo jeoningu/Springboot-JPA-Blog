@@ -101,7 +101,7 @@ public class BoardLikeServiceTest {
     }
 
     @Test
-    @DisplayName("좋아요 테스트")
+    @DisplayName("좋아요 요청 기본 테스트")
     void like() {
         // given
         // beforeEach()에서 사용자, 게시글 추가
@@ -158,6 +158,8 @@ public class BoardLikeServiceTest {
         Board resultBoardA = boardRepository.findById(boardList.get(0).getId()).orElseGet(null);
         Board resultBoardB = boardRepository.findById(boardList.get(1).getId()).orElseGet(null);
         // 2개 개시글에 각각 반씩 좋아요 했기 때문에 좋아요 카운트가 threadCount/2
+        log.debug("테스트 수행 후 결과A :{}", resultBoardA.getLikeCount());
+        log.debug("테스트 수행 후 결과B :{}", resultBoardB.getLikeCount());
         assertEquals(threadCount/2, resultBoardA.getLikeCount());
         assertEquals(threadCount/2, resultBoardB.getLikeCount());
     }

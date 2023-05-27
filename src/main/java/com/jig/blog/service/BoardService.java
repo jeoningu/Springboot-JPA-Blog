@@ -1,7 +1,6 @@
 package com.jig.blog.service;
 
 //import com.jig.blog.config.ServerSentEvents.backup.SseEmitters;
-import com.jig.blog.config.ServerSentEvents.NotificationService;
 import com.jig.blog.dto.BoardReqDto;
 import com.jig.blog.dto.ReplyReqDto;
 import com.jig.blog.model.*;
@@ -180,16 +179,16 @@ public class BoardService {
     @Transactional
     public void doLike(Long boardId, User user) {
         // 게시글 검색
-//        Board findBoard = boardRepository.findByWithOptimisticLock(boardId).orElseThrow(() -> {
+        /*// 낙관적 락 처리 방법
+        Board findBoard = boardRepository.findByWithUserOptimisticLock(boardId).orElseThrow(() -> {*/
         Board findBoard = boardRepository.findWithUserById(boardId).orElseThrow(() -> {
             return new IllegalArgumentException("좋아요 실패 - 찾을 수 없는 board id 입니다. : " + boardId);
         });
+        /*log.debug("update 수행 전 게시글 {}의 좋아요 수 : {}", findBoard.getId(), findBoard.getLikeCount());*/
 
-//        // 이미 좋아요 되어있다면 에러 반환
+        // 이미 좋아요 되어있다면 카운트 감소, 좋아요 정보 삭제
         Optional<Like> likeByUserAndBoard = likeRepository.findByUserAndBoard(user, findBoard);
         if (likeByUserAndBoard.isPresent()){
-//            throw new DuplicateResourceException("already exist data by member id :" + user.getId() + " ,"
-//                    + "board id : " + findBoard.getId());
             likeRepository.delete(likeByUserAndBoard.get());
             boardRepository.subtractLikeCount(findBoard);
         } else {
@@ -209,5 +208,9 @@ public class BoardService {
             */
             boardRepository.addLikeCount(findBoard);
         }
+        /*Board findUpdatedBoard = boardRepository.findWithUserById(boardId).orElseThrow(() -> {
+            return new IllegalArgumentException("좋아요 실패 - 찾을 수 없는 board id 입니다. : " + boardId);
+        });
+        log.debug("update 수행 후 게시글 {}의 좋아요 수 : {}", findUpdatedBoard.getId(), findUpdatedBoard.getLikeCount());*/
     }
 }

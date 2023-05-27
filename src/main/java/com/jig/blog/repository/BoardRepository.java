@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
 import java.util.List;
@@ -52,8 +53,9 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardCustom
 
     List<Board> findAllByOrderByCreatedDateDesc();
 
+    @Transactional
     @Lock(value = LockModeType.PESSIMISTIC_WRITE)
-    @Query("select s from Board s where s.id = :boardId")
-    Optional<Board>  findByWithOptimisticLock(@Param("boardId") final Long id);
+    @Query("select s from Board s join fetch s.user where s.id = :boardId")
+    Optional<Board> findByWithUserOptimisticLock(@Param("boardId") final Long id);
 
 }
