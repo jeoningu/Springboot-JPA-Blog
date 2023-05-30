@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // @BeforeAll,@Afterall 을 사용하기 위함
-public class BoardLikeServiceTest {
+public class BoardService_LikeTest {
 
     @Autowired
     private BoardService boardService;
@@ -123,7 +123,7 @@ public class BoardLikeServiceTest {
         assertThat(like.getBoard().getId()).isEqualTo(boardId);
     }
 
-    @DisplayName("2개 게시글에 좋아요 동시 요청 테스트(race condition 일어나는 테스트)")
+    @DisplayName("2개 게시글에 좋아요 동시 요청 테스트")
     @Test
     public void likeConcurrencyTest() throws InterruptedException {
         // given
@@ -164,7 +164,7 @@ public class BoardLikeServiceTest {
         assertEquals(threadCount/2, resultBoardB.getLikeCount());
     }
 
-    @DisplayName("같은 사용자로 좋아요 동시 요청 테스트(race condition 일어나는 테스트)")
+    @DisplayName("같은 사용자로 좋아요 동시 요청 테스트")
     @Test
     public void likeConcurrencyBySameUserTest() throws InterruptedException {
         // given
