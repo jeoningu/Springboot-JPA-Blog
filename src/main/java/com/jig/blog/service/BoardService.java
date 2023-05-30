@@ -14,6 +14,7 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -178,39 +179,61 @@ public class BoardService {
 
     @Transactional
     public void doLike(Long boardId, User user) {
-        // 게시글 검색
-        /*// 낙관적 락 처리 방법
-        Board findBoard = boardRepository.findByWithUserOptimisticLock(boardId).orElseThrow(() -> {*/
-        Board findBoard = boardRepository.findWithUserById(boardId).orElseThrow(() -> {
-            return new IllegalArgumentException("좋아요 실패 - 찾을 수 없는 board id 입니다. : " + boardId);
-        });
-        /*log.debug("update 수행 전 게시글 {}의 좋아요 수 : {}", findBoard.getId(), findBoard.getLikeCount());*/
+        /*
+        낙관적 락 처리시 try-catch 추가
+        try {
+        */
+            // 게시글 검색
+            /**/
+            // 낙관적 락 처리 방법
+            // Board findBoard = boardRepository.findByWithUserOptimisticLock(boardId).orElseThrow(() -> {
+            // 비관적 락 처리 방법
+            //Board findBoard = boardRepository.findByWithUserPessimisticWriteLock(boardId).orElseThrow(() -> {
+            // 분산 락 처리 시에는 db에 lock 처리하지 않고 별도 저장소에 lock 처리
+            Board findBoard = boardRepository.findWithUserById(boardId).orElseThrow(() -> {
+                return new IllegalArgumentException("좋아요 실패 - 찾을 수 없는 board id 입니다. : " + boardId);
+            });
+            /*log.debug("update 수행 전 게시글 {}의 좋아요 수 : {}", findBoard.getId(), findBoard.getLikeCount());*/
 
-        // 이미 좋아요 되어있다면 카운트 감소, 좋아요 정보 삭제
-        Optional<Like> likeByUserAndBoard = likeRepository.findByUserAndBoard(user, findBoard);
-        if (likeByUserAndBoard.isPresent()){
-            likeRepository.delete(likeByUserAndBoard.get());
-            boardRepository.subtractLikeCount(findBoard);
-        } else {
+            // 이미 좋아요 되어있다면 카운트 감소, 좋아요 정보 삭제
+            Optional<Like> likeByUserAndBoard = likeRepository.findByUserAndBoard(user, findBoard);
+            if (likeByUserAndBoard.isPresent()) {
+                likeRepository.delete(likeByUserAndBoard.get());
+                boardRepository.subtractLikeCount(findBoard);
+            } else {
 
-            // 좋아요 정보 저장
-            Like like = Like.builder()
-                    .user(user)
-                    .board(findBoard)
-                    .build();
-            likeRepository.save(like);
+                // 좋아요 정보 저장
+                Like like = Like.builder()
+                        .user(user)
+                        .board(findBoard)
+                        .build();
+                likeRepository.save(like);
 
-            // 게시글에 좋아요 카운트 추가
+                // 게시글에 좋아요 카운트 추가
+                /*
+                // 조회수만 1증가 시키는 간단한 예제이기 때문에 단순 쿼리로 해결할 수 있음
+                findBoard.setLikeCount(findBoard.getLikeCount()+1);
+                boardRepository.saveAndFlush(findBoard);
+                */
+                boardRepository.addLikeCount(findBoard);
+            }
+
             /*
-            // 조회수만 1증가 시키는 간단한 예제이기 때문에 단순 쿼리로 해결할 수 있음
-            findBoard.setLikeCount(findBoard.getLikeCount()+1);
-            boardRepository.saveAndFlush(findBoard);
+            Board findUpdatedBoard = boardRepository.findWithUserById(boardId).orElseThrow(() -> {
+                return new IllegalArgumentException("좋아요 실패 - 찾을 수 없는 board id 입니다. : " + boardId);
+            });
+            log.debug("update 수행 후 게시글 {}의 좋아요 수 : {}", findUpdatedBoard.getId(), findUpdatedBoard.getLikeCount());
             */
-            boardRepository.addLikeCount(findBoard);
+
+        /*
+        낙관적 락 처리시 try-catch 추가
+        트랜잭션에서 board에 update할 때 optimistic lock으로 select했던 version과
+        update하려는 시점의 board의 version이 다른 경우
+        다른 트랜잭션에 의해 board가 update 됐다고 보고 ObjectOptimisticLockingFailureException가 발생 합니다.
+
+        } catch (ObjectOptimisticLockingFailureException e) {
+            // ObjectOptimisticLockingFailureException 발생한 좋아요 요청 트랜잭션에 대해서 처리가 필요함
         }
-        /*Board findUpdatedBoard = boardRepository.findWithUserById(boardId).orElseThrow(() -> {
-            return new IllegalArgumentException("좋아요 실패 - 찾을 수 없는 board id 입니다. : " + boardId);
-        });
-        log.debug("update 수행 후 게시글 {}의 좋아요 수 : {}", findUpdatedBoard.getId(), findUpdatedBoard.getLikeCount());*/
+        */
     }
 }

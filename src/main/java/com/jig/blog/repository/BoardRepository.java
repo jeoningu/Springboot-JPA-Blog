@@ -53,9 +53,13 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardCustom
 
     List<Board> findAllByOrderByCreatedDateDesc();
 
-    @Transactional
-    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
+    //@Transactional
+    @Lock(value = LockModeType.OPTIMISTIC)
     @Query("select s from Board s join fetch s.user where s.id = :boardId")
     Optional<Board> findByWithUserOptimisticLock(@Param("boardId") final Long id);
+
+    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
+    @Query("select s from Board s join fetch s.user where s.id = :boardId")
+    Optional<Board> findByWithUserPessimisticWriteLock(@Param("boardId") final Long id);
 
 }

@@ -20,9 +20,11 @@ public class Board extends BaseTimeEntity {
     @Column(name = "board_id")
     private Long id;
 
-    /*// (좋아요 기능 동시성 처리 테스트에 사용됨) 낙관적 락 처리를 위한 version 컬럼
+    /*
+    // (좋아요 기능 동시성 처리 테스트에 사용됨) 낙관적 락 처리를 위한 version 컬럼
     @Version
-    private Long version;*/
+    private Long version;
+    */
 
     @Column(nullable = false, length = 100)
     private String title;
