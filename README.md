@@ -22,8 +22,8 @@ Front-end
   * ajax (비동기 통신 처리)
 * jsp
 ```
-### 실행
-* redis는 docker에 설치하여 기본 port 6379 사용
+### 실행 방법
+1. redis를 docker에 설치하여 기본 port 6379 사용
 ```
 # Redis 이미지를 Docker Hub에서 가져옵니다.
 docker pull redis
@@ -39,7 +39,7 @@ docker run --name dockerRedis -p 6379:6379 --network redis-net -d redis redis-se
 # redis-cli를 사용하여 -h 옵션으로 dockerRedis 컨테이너에 접속합니다.
 docker run -it --network redis-net --rm redis redis-cli -h dockerRedis
 
-# 도커를 재시 했을 때는 , redis-cli로 다시 dockerRedis에 연결합니다.
+# (도커를 재시작 했을 때 사용) redis-cli로 다시 dockerRedis에 연결합니다.
 docker exec -it dockerRedis redis-cli
 ```
 
