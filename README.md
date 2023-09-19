@@ -94,6 +94,10 @@ docker exec -it dockerRedis redis-cli
   * QClass에 "cannot find symbol" 에러는 'intellij 설정에서 빌더의 java 버전'과 'build.gradle 파일의 java 버전' 불일치가 원인
   * 그렇다 해도 gradle에서 build.gradle에 설정이 간편하긴 하니까 gradle 계속해서 사용하는 걸로 결정
 
+### ERD
+<img src="https://github.com/jeoningu/Springboot-JPA-Blog/assets/103714252/4754d2cd-6329-4b35-8c79-960f9220c70f"  width="800" height="500"/>
+
+
 ### 화면
 ![게시판 프로젝트 화면 모음_0001](https://user-images.githubusercontent.com/103714252/229777272-9f5b9341-51bd-4e87-b177-6b260e4a033b.png)
 ![게시판 프로젝트 화면 모음_0003](https://user-images.githubusercontent.com/103714252/229777568-139d3fd0-16ea-4d96-8e6c-e4641db9460b.png)
